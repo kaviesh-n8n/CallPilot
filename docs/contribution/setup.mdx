@@ -1,9 +1,9 @@
 ---
 title: Setup
-description: You can use this document to setup the dev environment for yourself. 
+description: You can use this document to setup the dev environment for yourself.
 ---
 <Note>
-If the below steps do not work out for you, it would be great if you can open an issue on [Github](https://github.com/dograh-hq/dograh/issues). 
+If the below steps do not work out for you, it would be great if you can open an issue on [Github](https://github.com/kaviesh-n8n/CallPilot/issues).
 </Note>
 
 ### System Requirements
@@ -17,13 +17,13 @@ All commands below are shown for **macOS / Linux**. Expand the **Windows** tab f
 </Note>
 
 ### Steps
-1. Fork the Dograh repository by going to https://github.com/dograh-hq/dograh
+1. Fork the CallPilot repository by going to https://github.com/kaviesh-n8n/CallPilot
 2. Clone **your fork** on your machine. You can skip `--recurse-submodules` here — the bootstrap script in the next step will initialize submodules for you.
 ```
 git clone https://github.com/<GITHUB_HANDLE>/dograh
-cd dograh
+cd callpilot
 ```
-3. Run the contributor bootstrap. It configures `origin` (your fork) and `upstream` (`dograh-hq/dograh`), initializes the pipecat submodule, creates the Python venv, and copies the `.env` templates. Re-running it is safe — already-configured pieces are skipped.
+3. Run the contributor bootstrap. It configures `origin` (your fork) and `upstream` (`kaviesh-n8n/CallPilot`), initializes the pipecat submodule, creates the Python venv, and copies the `.env` templates. Re-running it is safe — already-configured pieces are skipped.
 <CodeGroup>
 ```bash macOS/Linux
 bash scripts/setup_fork.sh
@@ -49,7 +49,7 @@ nvm use 24
 ```
 cd ui && npm install && cd ..
 ```
-6. Start local docker services 
+6. Start local docker services
 <Note>Please ensure you dont have any other instance of conflicting services running by checking `docker ps`</Note>
 ```
 docker compose -f docker-compose-local.yaml up -d
@@ -79,7 +79,7 @@ bash scripts/setup_requirements.sh --dev
 .\scripts\setup_requirements.ps1 -Dev
 ```
 </CodeGroup>
-8. Start backend services 
+8. Start backend services
 <CodeGroup>
 ```bash macOS/Linux
 bash scripts/start_services_dev.sh
@@ -128,7 +128,7 @@ cd ui && npm run dev
 10. You should be able to open the application on `localhost:3000` now
 
 ### Keeping your fork in sync with upstream
-The bootstrap script configures two remotes: `origin` (your fork, where you push) and `upstream` (`dograh-hq/dograh`, where new commits land). To pull in upstream changes:
+The bootstrap script configures two remotes: `origin` (your fork, where you push) and `upstream` (`kaviesh-n8n/CallPilot`, where new commits land). To pull in upstream changes:
 
 ```bash
 git fetch upstream
@@ -140,12 +140,12 @@ git push origin main
 Check your remotes any time with `git remote -v`. You should see:
 ```
 origin    https://github.com/<YOUR_HANDLE>/dograh.git (fetch/push)
-upstream  https://github.com/dograh-hq/dograh.git    (fetch/push)
+upstream  https://github.com/kaviesh-n8n/CallPilot.git    (fetch/push)
 ```
 
 <Note>
-Always push feature branches to **`origin`** (your fork), then open a pull request against `dograh-hq/dograh:main`. Never push directly to `upstream`.
+Always push feature branches to **`origin`** (your fork), then open a pull request against `kaviesh-n8n/CallPilot:main`. Never push directly to `upstream`.
 </Note>
 
 ### Next Steps
-We ship with AGENTS.md and CLAUDE.md which will help the Coding Agents get started quickly with the codebase. This should help your favourite coding agents to be able to navigate the codebase quickly and you can make changes to it and suit your specification better. 
+We ship with AGENTS.md and CLAUDE.md which will help the Coding Agents get started quickly with the codebase. This should help your favourite coding agents to be able to navigate the codebase quickly and you can make changes to it and suit your specification better.

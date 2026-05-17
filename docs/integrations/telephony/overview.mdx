@@ -5,7 +5,7 @@ description: "Connect voice agents with telephony providers for inbound and outb
 
 ## Overview
 
-Dograh AI's telephony integration system provides a unified interface for connecting with various telephony providers. The same configuration powers both outbound calls (initiated from Dograh) and inbound calls (received on a phone number you own).
+CallPilot AI's telephony integration system provides a unified interface for connecting with various telephony providers. The same configuration powers both outbound calls (initiated from CallPilot) and inbound calls (received on a phone number you own).
 
 ## Supported Providers
 
@@ -35,7 +35,7 @@ Dograh AI's telephony integration system provides a unified interface for connec
 
 ## Configuration
 
-All telephony providers are configured from a single page in Dograh:
+All telephony providers are configured from a single page in CallPilot:
 
 1. Navigate to **/telephony-configurations** and click **Add configuration**
 2. Select your provider
@@ -46,7 +46,7 @@ All telephony providers are configured from a single page in Dograh:
 <iframe
   className="w-full aspect-video rounded-xl"
   src="https://www.tella.tv/video/setting-up-telephony-configurations-in-dobra-f6zj/embed"
-  title="Setting up telephony configurations in Dograh"
+  title="Setting up telephony configurations in CallPilot"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowFullScreen
 ></iframe>
@@ -55,7 +55,7 @@ A single org can hold multiple configurations (for example, separate Twilio sub-
 
 ## Common Features
 
-The telephony integration in Dograh AI supports:
+The telephony integration in CallPilot AI supports:
 
 - **Outbound Calls**: Initiate calls to any phone number from a workflow or campaign
 - **Inbound Calls**: Route incoming calls to the right voice agent — see the [Inbound Calling guide](/integrations/telephony/inbound)
@@ -69,10 +69,10 @@ The telephony integration in Dograh AI supports:
 Inbound calls use a **single org-wide webhook URL**:
 
 ```
-https://api.dograh.com/api/v1/telephony/inbound/run
+https://api.callpilot.ai/api/v1/telephony/inbound/run
 ```
 
-Dograh resolves the org from the webhook's account credentials and the agent from the called number's **Inbound workflow** assignment. See [Inbound Calling](/integrations/telephony/inbound) for the full setup.
+CallPilot resolves the org from the webhook's account credentials and the agent from the called number's **Inbound workflow** assignment. See [Inbound Calling](/integrations/telephony/inbound) for the full setup.
 
 ## Troubleshooting
 
@@ -91,7 +91,7 @@ Dograh resolves the org from the webhook's account credentials and the agent fro
   </Accordion>
   
   <Accordion title="Webhook signature validation failing">
-    - Confirm auth tokens / API secrets match between provider and Dograh configuration
+    - Confirm auth tokens / API secrets match between provider and CallPilot configuration
     - Verify webhook URL matches exactly (including the `/inbound/run` path)
     - Check for proxy or load balancer modifications
   </Accordion>

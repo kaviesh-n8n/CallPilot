@@ -3,12 +3,12 @@ title: "Scaling"
 description: "Run multiple FastAPI worker processes behind nginx for higher throughput"
 ---
 
-By default, the Dograh API container runs a single uvicorn worker. For production traffic — especially with many concurrent voice calls (long-lived WebSockets) — you'll want multiple workers. Dograh ships with built-in support for this: nginx load-balances across N independent uvicorn processes using a `least_conn` strategy.
+By default, the CallPilot API container runs a single uvicorn worker. For production traffic — especially with many concurrent voice calls (long-lived WebSockets) — you'll want multiple workers. CallPilot ships with built-in support for this: nginx load-balances across N independent uvicorn processes using a `least_conn` strategy.
 
 This page covers how the multi-worker setup works, how to choose a worker count at install time, and how to change it on a running stack.
 
 <Warning>
-Multi-worker support requires **Dograh v1.29.0 or newer**. Earlier releases used `uvicorn --workers` and a different remote deployment layout. If your stack is older, [update first](/deployment/update) and then come back to this page.
+Multi-worker support requires **CallPilot v1.29.0 or newer**. Earlier releases used `uvicorn --workers` and a different remote deployment layout. If your stack is older, [update first](/deployment/update) and then come back to this page.
 </Warning>
 
 ## How it works
@@ -62,11 +62,11 @@ The script stores the value in **`.env`** (`FASTAPI_WORKERS=N`). The supported s
 
 ## Changing the worker count on a running stack
 
-Once Dograh is running, increasing or decreasing the worker count is a one-file edit plus a restart. Change `.env`, then start through `./remote_up.sh` so `dograh-init` regenerates nginx runtime config before Docker starts the stack.
+Once CallPilot is running, increasing or decreasing the worker count is a one-file edit plus a restart. Change `.env`, then start through `./remote_up.sh` so `dograh-init` regenerates nginx runtime config before Docker starts the stack.
 
 ### Steps
 
-All commands run from your `dograh/` directory (the one with `docker-compose.yaml`).
+All commands run from your `callpilot/` directory (the one with `docker-compose.yaml`).
 
 **1. Edit `.env`** and change the `FASTAPI_WORKERS` line:
 

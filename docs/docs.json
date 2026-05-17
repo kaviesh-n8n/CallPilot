@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Dograh AI",
+  "name": "CallPilot AI",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -266,23 +266,23 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg",
-    "href": "https://docs.dograh.com"
+    "href": "https://docs.callpilot.ai"
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "https://github.com/dograh-hq/dograh/issues/new/choose"
+        "href": "https://github.com/kaviesh-n8n/CallPilot/issues/new/choose"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://app.dograh.com"
+      "href": "https://app.callpilot.ai"
     }
   },
   "banner": {
-    "content": "🎉 **New: MCP Server & SDKs Released** — Drive Dograh from Claude, Cursor, or your own Python/TypeScript code. [MCP →](/integrations/mcp) · [SDKs →](/sdks/introduction)",
+    "content": "🎉 **New: MCP Server & SDKs Released** — Drive CallPilot from Claude, Cursor, or your own Python/TypeScript code. [MCP →](/integrations/mcp) · [SDKs →](/sdks/introduction)",
     "dismissible": true
   },
   "search": {

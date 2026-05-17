@@ -4,9 +4,10 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
+from sqlalchemy import func, select
 
 from api.db import db_client
-from api.db.models import UserModel
+from api.db.models import CampaignModel, OrganizationModel, UserModel, WorkflowModel, WorkflowRunModel
 from api.services.auth.depends import get_superuser
 from api.services.auth.stack_auth import stackauth
 
@@ -56,6 +57,14 @@ class SuperuserWorkflowRunsListResponse(BaseModel):
     total_pages: int
 
 
+class SuperuserStatsResponse(BaseModel):
+    total_users: int
+    total_organizations: int
+    total_voice_agents: int
+    total_campaigns: int
+    total_calls: int
+
+
 @router.post("/impersonate")
 async def impersonate(
     request: ImpersonateRequest, user: UserModel = Depends(get_superuser)
@@ -95,6 +104,28 @@ async def impersonate(
     return ImpersonateResponse(
         refresh_token=session["refresh_token"],
         access_token=session["access_token"],
+    )
+
+
+@router.get("/stats")
+async def get_superuser_stats(
+    user: UserModel = Depends(get_superuser),
+) -> SuperuserStatsResponse:
+    """Return high-level SaaS metrics for the admin dashboard."""
+
+    async with db_client.async_session() as session:
+        total_users = await session.scalar(select(func.count(UserModel.id)))
+        total_organizations = await session.scalar(select(func.count(OrganizationModel.id)))
+        total_voice_agents = await session.scalar(select(func.count(WorkflowModel.id)))
+        total_campaigns = await session.scalar(select(func.count(CampaignModel.id)))
+        total_calls = await session.scalar(select(func.count(WorkflowRunModel.id)))
+
+    return SuperuserStatsResponse(
+        total_users=total_users or 0,
+        total_organizations=total_organizations or 0,
+        total_voice_agents=total_voice_agents or 0,
+        total_campaigns=total_campaigns or 0,
+        total_calls=total_calls or 0,
     )
 
 

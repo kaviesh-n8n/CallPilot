@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const OSS_TOKEN_COOKIE = 'dograh_auth_token';
-const OSS_USER_COOKIE = 'dograh_auth_user';
+const OSS_TOKEN_COOKIE = 'callpilot_auth_token';
+const OSS_USER_COOKIE = 'callpilot_auth_user';
 
 export async function POST() {
   const cookieStore = await cookies();

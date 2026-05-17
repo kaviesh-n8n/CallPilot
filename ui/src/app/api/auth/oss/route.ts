@@ -8,8 +8,8 @@ import { NextResponse } from 'next/server';
 
 import { getAuthProvider } from '@/lib/auth/config';
 
-const OSS_TOKEN_COOKIE = 'dograh_auth_token';
-const OSS_USER_COOKIE = 'dograh_auth_user';
+const OSS_TOKEN_COOKIE = 'callpilot_auth_token';
+const OSS_USER_COOKIE = 'callpilot_auth_user';
 
 export async function GET() {
   const authProvider = await getAuthProvider();

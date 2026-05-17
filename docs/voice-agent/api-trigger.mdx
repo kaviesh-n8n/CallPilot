@@ -3,7 +3,7 @@ title: "API Trigger"
 description: "Trigger outbound calls from external systems like n8n, Zapier, or your own backend"
 ---
 
-The API Trigger node lets you initiate outbound calls to your voice agent programmatically. When you add an API Trigger node to your workflow, Dograh generates a unique endpoint URL that external systems can call to start a conversation.
+The API Trigger node lets you initiate outbound calls to your voice agent programmatically. When you add an API Trigger node to your workflow, CallPilot generates a unique endpoint URL that external systems can call to start a conversation.
 
 This is useful when you want to trigger calls from your own backend, a CRM, or workflow tools like n8n and Zapier.
 
@@ -14,14 +14,14 @@ This is useful when you want to trigger calls from your own backend, a CRM, or w
 
 ## Finding your trigger URL
 
-When you add an API Trigger node to your workflow, Dograh assigns it a unique UUID. The trigger node exposes two URLs that share this UUID — one for the published agent and one for the latest draft. You can copy either URL from the trigger node's settings dialog.
+When you add an API Trigger node to your workflow, CallPilot assigns it a unique UUID. The trigger node exposes two URLs that share this UUID — one for the published agent and one for the latest draft. You can copy either URL from the trigger node's settings dialog.
 
 ```
-POST https://your-dograh-instance/api/v1/public/agent/{uuid}        # Production
-POST https://your-dograh-instance/api/v1/public/agent/test/{uuid}   # Test
+POST https://your-callpilot-instance/api/v1/public/agent/{uuid}        # Production
+POST https://your-callpilot-instance/api/v1/public/agent/test/{uuid}   # Test
 ```
 
-If you are using the hosted version, replace `your-dograh-instance` with `api.dograh.com`.
+If you are using the hosted version, replace `your-callpilot-instance` with `api.callpilot.ai`.
 
 ### Test vs production
 
@@ -39,7 +39,7 @@ The request body, headers, and response shape are identical for both URLs.
 Authenticate by passing your API key in the `X-API-Key` header. The request body requires a `phone_number` and accepts optional `initial_context` and `telephony_configuration_id` fields.
 
 ```bash
-curl -X POST https://your-dograh-instance/api/v1/public/agent/{uuid} \
+curl -X POST https://your-callpilot-instance/api/v1/public/agent/{uuid} \
   -H "Content-Type: application/json" \
   -H "X-API-Key: dg_your_api_key" \
   -d '{
@@ -103,7 +103,7 @@ By default, calls are placed through your organization's default outbound [telep
 }
 ```
 
-The id is shown on each row in **Telephony configurations** (`https://app.dograh.com/telephony-configurations` for hosted or `http://localhost:3010/telephony-configurations` for local). The configuration must belong to the same organization as the API Trigger; otherwise the request returns `404`.
+The id is shown on each row in **Telephony configurations** (`https://app.callpilot.ai/telephony-configurations` for hosted or `http://localhost:3010/telephony-configurations` for local). The configuration must belong to the same organization as the API Trigger; otherwise the request returns `404`.
 
 <Note>
 For full endpoint details including all parameters and response fields, see the [API reference](/api-reference/calls/trigger).

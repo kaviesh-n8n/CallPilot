@@ -227,7 +227,7 @@ async def create_user_configuration_with_mps_key(
             response = await client.post(
                 f"{MPS_API_URL}/api/v1/service-keys/",
                 json={
-                    "name": f"Default Dograh Model Service Key",
+                    "name": f"Default CallPilot Model Service Key",
                     "description": "Auto-generated key for OSS user",
                     "expires_in_days": 7,  # Short-lived for OSS
                     "created_by": user_provider_id,
@@ -245,7 +245,7 @@ async def create_user_configuration_with_mps_key(
             response = await client.post(
                 f"{MPS_API_URL}/api/v1/service-keys/",
                 json={
-                    "name": f"Default Dograh Model Service Key",
+                    "name": f"Default CallPilot Model Service Key",
                     "description": f"Auto-generated key for organization {organization_id}",
                     "organization_id": organization_id,
                     "expires_in_days": 90,  # Longer-lived for authenticated users
@@ -296,7 +296,13 @@ async def get_superuser(
     Dependency to check if the authenticated user is a superuser.
     Raises HTTPException if user is not authenticated or not a superuser.
     """
-    user = await get_user(authorization, x_api_key)
+    if x_api_key:
+        raise HTTPException(
+            status_code=403,
+            detail="API keys cannot be used for superuser operations.",
+        )
+
+    user = await get_user(authorization, None)
 
     if not user.is_superuser:
         raise HTTPException(

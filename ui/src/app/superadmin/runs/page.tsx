@@ -500,8 +500,9 @@ export default function RunsPage() {
                                                                             op: 'and',
                                                                         }),
                                                                     );
+                                                                    const axiomOrg = process.env.NEXT_PUBLIC_AXIOM_ORG ?? "callpilot";
                                                                     window.open(
-                                                                        `https://app.axiom.co/dograh-of6c/stream/${process.env.NEXT_PUBLIC_AXIOM_LOG_DATASET}?q=${query}`,
+                                                                        `https://app.axiom.co/${axiomOrg}/stream/${process.env.NEXT_PUBLIC_AXIOM_LOG_DATASET}?q=${query}`,
                                                                         '_blank',
                                                                     );
                                                                 }}

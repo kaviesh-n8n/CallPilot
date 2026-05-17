@@ -1,13 +1,13 @@
 ---
 title: "Custom Domain"
-description: "Deploy Dograh AI with custom domain names and SSL certificates"
+description: "Deploy CallPilot AI with custom domain names and SSL certificates"
 ---
 
-Deploy Dograh AI with your own custom domain name for a professional production setup. By now, you should be able to create and test a voice agent by following the previous guide to setup the platform on a remote server using [Docker](docker#option-2%3A-remote-server-deployment)
+Deploy CallPilot AI with your own custom domain name for a professional production setup. By now, you should be able to create and test a voice agent by following the previous guide to setup the platform on a remote server using [Docker](docker#option-2%3A-remote-server-deployment)
 
 ## What is Custom Domain Deployment?
 
-Custom domain deployment allows you to run Dograh AI with a personalized domain name (like `voice.yourcompany.com`) instead of using IP addresses. This setup includes:
+Custom domain deployment allows you to run CallPilot AI with a personalized domain name (like `voice.yourcompany.com`) instead of using IP addresses. This setup includes:
 
 - **Custom Domain**: Access your application via a memorable domain name
 - **Automatic SSL**: Proper SSL certificates from Let's Encrypt or similar providers
@@ -20,7 +20,7 @@ Before starting, ensure you have:
 
 - A domain name you own (e.g., `yourcompany.com`)
 - Access to your domain's DNS settings (usually through your domain registrar)
-- Dograh AI already running on your server via the [remote deployment](docker#option-2%3A-remote-server-deployment) guide
+- CallPilot AI already running on your server via the [remote deployment](docker#option-2%3A-remote-server-deployment) guide
 - Your server's public IP address
 
 ## Step 1: Configure DNS Records
@@ -57,14 +57,14 @@ You should see your server's IP address in the response.
 Once your DNS is configured, run the automated setup script that handles the rest.
 
 <Note>
-You must be at the same place where you had run `setup_remote.sh` from. The directory should contain `dograh/` with the artifacts that got created when `setup_remote.sh` was run.
+You must be at the same place where you had run `setup_remote.sh` from. The directory should contain `callpilot/` with the artifacts that got created when `setup_remote.sh` was run.
 </Note>
 <Note>
-You must not move the `dograh/` directory to a different location after running `setup_custom_domain.sh`, since we set up auto certificate renewal script as certbot renewal hook pointing to the `dograh/` directory.
+You must not move the `callpilot/` directory to a different location after running `setup_custom_domain.sh`, since we set up auto certificate renewal script as certbot renewal hook pointing to the `callpilot/` directory.
 </Note>
 
 ```bash
-curl -o setup_custom_domain.sh https://raw.githubusercontent.com/dograh-hq/dograh/main/scripts/setup_custom_domain.sh && chmod +x setup_custom_domain.sh && sudo ./setup_custom_domain.sh
+curl -o setup_custom_domain.sh https://raw.githubusercontent.com/kaviesh-n8n/CallPilot/main/scripts/setup_custom_domain.sh && chmod +x setup_custom_domain.sh && sudo ./setup_custom_domain.sh
 ```
 
 The script will prompt you for:
@@ -78,7 +78,7 @@ It will automatically:
 - Update the canonical public host/base URL settings in `.env`
 - Validate the runtime config that `dograh-init` will render from `.env`
 - Configure automatic certificate renewal
-- Restart Dograh services through the validated startup wrapper
+- Restart CallPilot services through the validated startup wrapper
 
 Once complete, your application will be available at `https://voice.yourcompany.com`.
 
@@ -109,12 +109,12 @@ sudo apt install certbot -y
 sudo yum install certbot -y
 ```
 
-### Stop Dograh Services
+### Stop CallPilot Services
 
-Before generating certificates, stop the running Dograh services to free up port 80:
+Before generating certificates, stop the running CallPilot services to free up port 80:
 
 ```bash
-cd dograh
+cd callpilot
 sudo docker compose --profile remote down
 ```
 
@@ -137,12 +137,12 @@ Certbot will:
 You'll be prompted to enter an email address for renewal notifications and agree to the terms of service.
 </Note>
 
-### Copy Certificates to Dograh Directory
+### Copy Certificates to CallPilot Directory
 
 Copy the generated certificates to the dograh certs directory:
 
 ```bash
-cd dograh
+cd callpilot
 sudo cp /etc/letsencrypt/live/voice.yourcompany.com/fullchain.pem certs/local.crt
 sudo cp /etc/letsencrypt/live/voice.yourcompany.com/privkey.pem certs/local.key
 sudo chmod 644 certs/local.crt certs/local.key
@@ -153,7 +153,7 @@ sudo chmod 644 certs/local.crt certs/local.key
 Update `.env` so the canonical remote settings point at your domain:
 
 ```bash
-nano dograh/.env
+nano callpilot/.env
 ```
 
 ```bash
@@ -161,12 +161,12 @@ PUBLIC_HOST=voice.yourcompany.com
 PUBLIC_BASE_URL=https://voice.yourcompany.com
 ```
 
-### Start Dograh Services
+### Start CallPilot Services
 
-Start Dograh through the validated startup wrapper so `dograh-init` regenerates nginx and coturn runtime config before Docker starts:
+Start CallPilot through the validated startup wrapper so `dograh-init` regenerates nginx and coturn runtime config before Docker starts:
 
 ```bash
-cd dograh
+cd callpilot
 ./remote_up.sh
 ```
 
@@ -195,9 +195,9 @@ Add the following content (replace paths as needed):
 ```bash
 #!/bin/bash
 # Copy renewed certificates to dograh certs directory
-cp /etc/letsencrypt/live/voice.yourcompany.com/fullchain.pem /home/ubuntu/dograh/certs/local.crt
-cp /etc/letsencrypt/live/voice.yourcompany.com/privkey.pem /home/ubuntu/dograh/certs/local.key
-chmod 644 /home/ubuntu/dograh/certs/local.crt /home/ubuntu/dograh/certs/local.key
+cp /etc/letsencrypt/live/voice.yourcompany.com/fullchain.pem /home/ubuntu/callpilot/certs/local.crt
+cp /etc/letsencrypt/live/voice.yourcompany.com/privkey.pem /home/ubuntu/callpilot/certs/local.key
+chmod 644 /home/ubuntu/callpilot/certs/local.crt /home/ubuntu/callpilot/certs/local.key
 
 # Restart nginx to load new certificates
 cd /home/ubuntu/dograh
@@ -230,8 +230,8 @@ If Certbot fails to generate certificates:
 
 If you see SSL errors after setup:
 
-1. Verify the certificates were copied correctly: `ls -la dograh/certs/`
-2. Run `./remote_up.sh --preflight-only` in `dograh/` to verify the `dograh-init` runtime render matches `.env`
+1. Verify the certificates were copied correctly: `ls -la callpilot/certs/`
+2. Run `./remote_up.sh --preflight-only` in `callpilot/` to verify the `dograh-init` runtime render matches `.env`
 3. Restart the nginx container: `sudo docker compose --profile remote restart nginx`
 
 ### WebRTC Connection Issues

@@ -1,37 +1,37 @@
 ---
 title: "Agent Stream"
-description: "Stream audio to a Dograh agent over a WebSocket"
+description: "Stream audio to a CallPilot agent over a WebSocket"
 ---
 
 ## Overview
 
-Agent Stream is a WebSocket endpoint that lets a telephony provider point its media stream at a single URL and drive a Dograh agent run. The agent UUID in the URL selects the agent; provider-specific identifiers in the query string (for Cloudonix: `Domain`) tell Dograh which stored telephony configuration to use for that call. The bearer token and other credentials are never passed in the URL — they live in the stored configuration and are used by Dograh to validate the session and to issue provider API calls (hangup, transfer) during the call.
+Agent Stream is a WebSocket endpoint that lets a telephony provider point its media stream at a single URL and drive a CallPilot agent run. The agent UUID in the URL selects the agent; provider-specific identifiers in the query string (for Cloudonix: `Domain`) tell CallPilot which stored telephony configuration to use for that call. The bearer token and other credentials are never passed in the URL — they live in the stored configuration and are used by CallPilot to validate the session and to issue provider API calls (hangup, transfer) during the call.
 
 This is useful when:
 
-- You're integrating Dograh into a SIP gateway or in-house dialer that already speaks a supported provider's streaming protocol
+- You're integrating CallPilot into a SIP gateway or in-house dialer that already speaks a supported provider's streaming protocol
 - You want one stable endpoint per agent rather than wiring up an inbound webhook per phone number
 
 <Warning>
   Agent Stream currently supports the **Cloudonix** provider only. Other providers
   return `NotImplementedError` until a per-provider implementation lands. If you
   need Twilio, Plivo, Telnyx, Vonage, ARI, or another provider, please open a
-  request on [GitHub Discussions](https://github.com/dograh-hq/dograh/discussions)
+  request on [GitHub Discussions](https://github.com/kaviesh-n8n/CallPilot/discussions)
   with your use case.
 </Warning>
 
 ## Endpoint
 
 ```
-wss://app.dograh.com/api/v1/agent-stream/{agent_uuid}
+wss://app.callpilot.ai/api/v1/agent-stream/{agent_uuid}
 ```
 
-`{agent_uuid}` is the agent's stable UUID (see [Get the Agent UUID](#get-the-agent-uuid) below). On self-hosted deployments, replace `app.dograh.com` with your backend host.
+`{agent_uuid}` is the agent's stable UUID (see [Get the Agent UUID](#get-the-agent-uuid) below). On self-hosted deployments, replace `app.callpilot.ai` with your backend host.
 
 ## Prerequisites
 
-- A Dograh agent (workflow) — published or in draft is fine
-- A Cloudonix telephony configuration in your Dograh organization whose `domain_id` matches the `Domain` you pass on the URL. Dograh uses the bearer token from this configuration to validate the call session and to issue provider API calls (hangup, transfer).
+- A CallPilot agent (workflow) — published or in draft is fine
+- A Cloudonix telephony configuration in your CallPilot organization whose `domain_id` matches the `Domain` you pass on the URL. CallPilot uses the bearer token from this configuration to validate the call session and to issue provider API calls (hangup, transfer).
 
 ## Get the Agent UUID
 
@@ -56,7 +56,7 @@ The Agent UUID is the workflow's stable identifier — it doesn't change when ve
 | Param | Required | Description |
 | --- | --- | --- |
 | `provider` | Yes | Provider name. Currently only `cloudonix` is supported. |
-| `Domain` | Yes (cloudonix) | Cloudonix domain ID. Dograh uses this to look up the matching stored telephony configuration and retrieve the bearer token used for provider API calls. |
+| `Domain` | Yes (cloudonix) | Cloudonix domain ID. CallPilot uses this to look up the matching stored telephony configuration and retrieve the bearer token used for provider API calls. |
 | `callId` / `CallSid` | No | Call identifier from your side; persisted on the workflow run's `gathered_context` as `call_id`. The Cloudonix call SID used for streaming is taken from the `start` event payload, not this param. |
 | `from` | No | Caller phone number, persisted on the workflow run as `caller_number`. |
 | `to` | No | Called phone number, persisted on the workflow run as `called_number`. |
@@ -64,7 +64,7 @@ The Agent UUID is the workflow's stable identifier — it doesn't change when ve
 ### Cloudonix example
 
 ```
-wss://app.dograh.com/api/v1/agent-stream/{agent_uuid}
+wss://app.callpilot.ai/api/v1/agent-stream/{agent_uuid}
   ?provider=cloudonix
   &Domain={CLOUDONIX_DOMAIN_ID}
   &callId={CALL_ID}
@@ -72,23 +72,23 @@ wss://app.dograh.com/api/v1/agent-stream/{agent_uuid}
   &to=+15555550199
 ```
 
-Use this URL inside the CXML `<Stream>` your Cloudonix Voice Application returns when the call needs to be bridged to the Dograh agent:
+Use this URL inside the CXML `<Stream>` your Cloudonix Voice Application returns when the call needs to be bridged to the CallPilot agent:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Connect>
-    <Stream url="wss://app.dograh.com/api/v1/agent-stream/{agent_uuid}?provider=cloudonix&Domain=...&callId=...&from=...&to=..."/>
+    <Stream url="wss://app.callpilot.ai/api/v1/agent-stream/{agent_uuid}?provider=cloudonix&Domain=...&callId=...&from=...&to=..."/>
   </Connect>
   <Pause length="40"/>
 </Response>
 ```
 
-The first two messages on the socket should be Cloudonix's standard `connected` and `start` events (Twilio-compatible framing). Dograh extracts `streamSid` and `callSid` from the `start` event payload, validates the session against Cloudonix using the bearer token from the stored telephony configuration matched by `Domain`, and then begins streaming audio.
+The first two messages on the socket should be Cloudonix's standard `connected` and `start` events (Twilio-compatible framing). CallPilot extracts `streamSid` and `callSid` from the `start` event payload, validates the session against Cloudonix using the bearer token from the stored telephony configuration matched by `Domain`, and then begins streaming audio.
 
 ## Workflow run lifecycle
 
-When the WebSocket is accepted, Dograh:
+When the WebSocket is accepted, CallPilot:
 
 1. Looks up the workflow by `agent_uuid`
 2. Runs a quota check against the workflow's owning user
@@ -108,4 +108,4 @@ The run is visible under the agent's **Runs** tab as soon as it's minted, just l
 ## Security notes
 
 - Treat the URL as a secret — the agent UUID itself authorizes the connection. Store and transmit it only over TLS, and avoid logging the raw URL in places where access is broader than your operations team.
-- No bearer tokens or provider secrets are passed in the URL. Provider credentials live in the stored telephony configuration (matched by `Domain` for Cloudonix) and are used server-side by Dograh to validate the session and issue provider API calls.
+- No bearer tokens or provider secrets are passed in the URL. Provider credentials live in the stored telephony configuration (matched by `Domain` for Cloudonix) and are used server-side by CallPilot to validate the session and issue provider API calls.

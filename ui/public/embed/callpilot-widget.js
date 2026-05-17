@@ -1,6 +1,6 @@
 /**
- * Dograh Voice Widget
- * Embeddable voice call widget for Dograh workflows
+ * CallPilot Voice Widget
+ * Embeddable voice call widget for CallPilot workflows
  * Version: 1.0.0
  */
 
@@ -13,7 +13,7 @@
     autoStart: false,
     apiBaseUrl: window.location.hostname === 'localhost'
       ? 'http://localhost:8000'
-      : 'https://api.dograh.com'
+      : 'https://api.callpilot.ai'
   };
 
   // Widget state
@@ -48,9 +48,9 @@
     if (state.isInitialized) return;
 
     // Get token from script URL
-    const script = document.currentScript || document.querySelector('script[src*="dograh-widget.js"]');
+    const script = document.currentScript || document.querySelector('script[src*="callpilot-widget.js"]');
     if (!script) {
-      console.error('Dograh Widget: Script not found');
+      console.error('CallPilot Widget: Script not found');
       return;
     }
 
@@ -61,7 +61,7 @@
     const environment = scriptUrl.searchParams.get('environment');
 
     if (!token) {
-      console.error('Dograh Widget: No token found in script URL');
+      console.error('CallPilot Widget: No token found in script URL');
       return;
     }
 
@@ -89,7 +89,7 @@
       apiBaseUrl: apiBaseUrl,
       environment: environment || 'production',
       // Allow data attributes to override fetched config
-      contextVariables: parseContextVariables(script.getAttribute('data-dograh-context'))
+      contextVariables: parseContextVariables(script.getAttribute('data-callpilot-context'))
     };
 
     try {
@@ -113,7 +113,7 @@
         ...state.config,
         workflowId: configData.workflow_id,
         embedMode: configData.settings?.embedMode || 'floating',
-        containerId: configData.settings?.containerId || 'dograh-inline-container',
+        containerId: configData.settings?.containerId || 'callpilot-inline-container',
         position: configData.position || DEFAULT_CONFIG.position,
         buttonColor: configData.settings?.buttonColor || '#10b981',
         buttonText: configData.settings?.buttonText || 'Talk to Agent',
@@ -121,7 +121,7 @@
         autoStart: configData.auto_start || false
       };
     } catch (error) {
-      console.error('Dograh Widget: Failed to fetch configuration', error);
+      console.error('CallPilot Widget: Failed to fetch configuration', error);
       return;
     }
 
@@ -157,7 +157,7 @@
     try {
       return JSON.parse(contextStr);
     } catch (e) {
-      console.warn('Dograh Widget: Invalid context variables', e);
+      console.warn('CallPilot Widget: Invalid context variables', e);
       return {};
     }
   }
@@ -166,36 +166,36 @@
    * Inject widget styles
    */
   function injectStyles() {
-    if (document.getElementById('dograh-widget-styles')) return;
+    if (document.getElementById('callpilot-widget-styles')) return;
 
     const styles = `
-      .dograh-widget-container {
+      .callpilot-widget-container {
         position: fixed;
         z-index: 999999;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
 
-      .dograh-widget-container.bottom-right {
+      .callpilot-widget-container.bottom-right {
         bottom: 20px;
         right: 20px;
       }
 
-      .dograh-widget-container.bottom-left {
+      .callpilot-widget-container.bottom-left {
         bottom: 20px;
         left: 20px;
       }
 
-      .dograh-widget-container.top-right {
+      .callpilot-widget-container.top-right {
         top: 20px;
         right: 20px;
       }
 
-      .dograh-widget-container.top-left {
+      .callpilot-widget-container.top-left {
         top: 20px;
         left: 20px;
       }
 
-      .dograh-widget-cta {
+      .callpilot-widget-cta {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -210,32 +210,32 @@
         max-width: calc(100vw - 40px);
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
         transition: filter 150ms ease, transform 100ms ease, box-shadow 200ms ease;
-        animation: dograh-cta-in 220ms ease-out;
+        animation: callpilot-cta-in 220ms ease-out;
       }
 
-      .dograh-widget-cta:hover {
+      .callpilot-widget-cta:hover {
         filter: brightness(1.08);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
       }
-      .dograh-widget-cta:active { transform: scale(0.98); }
+      .callpilot-widget-cta:active { transform: scale(0.98); }
 
-      .dograh-widget-cta.dograh-state-connecting { background: #f59e0b !important; animation: dograh-pulse 1.6s infinite; }
-      .dograh-widget-cta.dograh-state-connected  { background: #ef4444 !important; }
-      .dograh-widget-cta.dograh-state-failed     { background: #ef4444 !important; opacity: 0.85; }
+      .callpilot-widget-cta.callpilot-state-connecting { background: #f59e0b !important; animation: callpilot-pulse 1.6s infinite; }
+      .callpilot-widget-cta.callpilot-state-connected  { background: #ef4444 !important; }
+      .callpilot-widget-cta.callpilot-state-failed     { background: #ef4444 !important; opacity: 0.85; }
 
-      @keyframes dograh-pulse {
+      @keyframes callpilot-pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.6; }
       }
 
-      @keyframes dograh-cta-in {
+      @keyframes callpilot-cta-in {
         from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
       }
     `;
 
     const styleSheet = document.createElement('style');
-    styleSheet.id = 'dograh-widget-styles';
+    styleSheet.id = 'callpilot-widget-styles';
     styleSheet.textContent = styles;
     document.head.appendChild(styleSheet);
   }
@@ -255,11 +255,11 @@
    */
   function createFloatingWidget() {
     const container = document.createElement('div');
-    container.className = `dograh-widget-container ${state.config.position}`;
-    container.id = 'dograh-widget-root';
+    container.className = `callpilot-widget-container ${state.config.position}`;
+    container.id = 'callpilot-widget-root';
 
     const audio = document.createElement('audio');
-    audio.id = 'dograh-widget-audio';
+    audio.id = 'callpilot-widget-audio';
     audio.autoplay = true;
     audio.style.display = 'none';
     container.appendChild(audio);
@@ -274,7 +274,7 @@
    * element so an in-progress call is not interrupted on status changes.
    */
   function renderFloating() {
-    const container = document.getElementById('dograh-widget-root');
+    const container = document.getElementById('callpilot-widget-root');
     if (!container) return;
 
     Array.from(container.children).forEach((child) => {
@@ -284,9 +284,9 @@
     const status = state.connectionStatus || 'idle';
 
     const button = document.createElement('button');
-    button.id = 'dograh-widget-cta';
+    button.id = 'callpilot-widget-cta';
     button.type = 'button';
-    button.className = `dograh-widget-cta dograh-state-${status}`;
+    button.className = `callpilot-widget-cta callpilot-state-${status}`;
     // Idle uses configured color; status states use CSS-defined colors.
     if (status === 'idle') {
       button.style.backgroundColor = state.config.buttonColor;
@@ -307,11 +307,11 @@
   }
 
   /**
-   * Create headless widget (no UI — host page drives everything via window.DograhWidget API)
+   * Create headless widget (no UI — host page drives everything via window.CallPilotWidget API)
    */
   function createHeadlessWidget() {
     const audio = document.createElement('audio');
-    audio.id = 'dograh-widget-audio';
+    audio.id = 'callpilot-widget-audio';
     audio.autoplay = true;
     audio.style.display = 'none';
     document.body.appendChild(audio);
@@ -341,7 +341,7 @@
     // Find container element
     const container = document.getElementById(state.config.containerId);
     if (!container) {
-      console.error(`Dograh Widget: Container element with id "${state.config.containerId}" not found`);
+      console.error(`CallPilot Widget: Container element with id "${state.config.containerId}" not found`);
       if (state.callbacks.onError) {
         state.callbacks.onError(new Error('Container element not found'));
       }
@@ -350,11 +350,11 @@
 
     // Clear container
     container.innerHTML = '';
-    container.className = 'dograh-inline-container';
+    container.className = 'callpilot-inline-container';
 
     // Add minimal inline styles
     const inlineStyles = `
-      .dograh-inline-container {
+      .callpilot-inline-container {
         min-height: 200px;
         padding: 20px;
         display: flex;
@@ -362,38 +362,38 @@
         justify-content: center;
       }
 
-      .dograh-inline-status {
+      .callpilot-inline-status {
         text-align: center;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
 
-      .dograh-inline-status-icon {
+      .callpilot-inline-status-icon {
         width: 64px;
         height: 64px;
         margin: 0 auto 20px;
       }
 
-      .dograh-inline-status-text {
+      .callpilot-inline-status-text {
         font-size: 18px;
         font-weight: 500;
         margin: 0 0 8px;
         color: #111827;
       }
 
-      .dograh-inline-status-subtext {
+      .callpilot-inline-status-subtext {
         font-size: 14px;
         color: #6b7280;
         margin: 0 0 20px;
       }
 
-      .dograh-inline-button-container {
+      .callpilot-inline-button-container {
         display: flex;
         gap: 12px;
         justify-content: center;
         margin-top: 20px;
       }
 
-      .dograh-inline-btn {
+      .callpilot-inline-btn {
         padding: 12px 32px;
         border-radius: 8px;
         border: none;
@@ -405,28 +405,28 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       }
 
-      .dograh-inline-btn:hover {
+      .callpilot-inline-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       }
 
-      .dograh-inline-btn:active {
+      .callpilot-inline-btn:active {
         transform: translateY(0);
       }
 
-      .dograh-inline-btn-start {
+      .callpilot-inline-btn-start {
         background: #10b981;
       }
 
-      .dograh-inline-btn-start:hover {
+      .callpilot-inline-btn-start:hover {
         background: #059669;
       }
 
-      .dograh-inline-btn-end {
+      .callpilot-inline-btn-end {
         background: #ef4444;
       }
 
-      .dograh-inline-btn-end:hover {
+      .callpilot-inline-btn-end:hover {
         background: #dc2626;
       }
 
@@ -435,15 +435,15 @@
         50% { opacity: 0.5; }
       }
 
-      .dograh-inline-pulse {
+      .callpilot-inline-pulse {
         animation: pulse 2s infinite;
       }
     `;
 
     // Add inline styles if not already added
-    if (!document.getElementById('dograh-inline-styles')) {
+    if (!document.getElementById('callpilot-inline-styles')) {
       const styleSheet = document.createElement('style');
-      styleSheet.id = 'dograh-inline-styles';
+      styleSheet.id = 'callpilot-inline-styles';
       styleSheet.textContent = inlineStyles;
       document.head.appendChild(styleSheet);
     }
@@ -491,14 +491,14 @@
     if (status === 'idle' || status === 'failed') {
       // Button to start with configured color
       buttonHTML = `
-        <button class="dograh-inline-btn dograh-inline-btn-start" id="dograh-inline-start-btn" style="background: ${state.config.buttonColor};">
+        <button class="callpilot-inline-btn callpilot-inline-btn-start" id="callpilot-inline-start-btn" style="background: ${state.config.buttonColor};">
           ${status === 'failed' ? 'Retry' : state.config.buttonText}
         </button>
       `;
     } else if (status === 'connecting' || status === 'connected') {
       // Red button to end
       buttonHTML = `
-        <button class="dograh-inline-btn dograh-inline-btn-end" id="dograh-inline-end-btn">
+        <button class="callpilot-inline-btn callpilot-inline-btn-end" id="callpilot-inline-end-btn">
           End Call
         </button>
       `;
@@ -507,13 +507,13 @@
     // Update container content (preserve audio element)
     const audioElement = state.audioElement;
     container.innerHTML = `
-      <div class="dograh-inline-status">
-        <div class="dograh-inline-status-icon ${status === 'connecting' ? 'dograh-inline-pulse' : ''}">
+      <div class="callpilot-inline-status">
+        <div class="callpilot-inline-status-icon ${status === 'connecting' ? 'callpilot-inline-pulse' : ''}">
           ${getStatusIcon(status)}
         </div>
-        <p class="dograh-inline-status-text">${displayText}</p>
-        <p class="dograh-inline-status-subtext">${displaySubtext}</p>
-        <div class="dograh-inline-button-container">
+        <p class="callpilot-inline-status-text">${displayText}</p>
+        <p class="callpilot-inline-status-subtext">${displaySubtext}</p>
+        <div class="callpilot-inline-button-container">
           ${buttonHTML}
         </div>
       </div>
@@ -525,10 +525,10 @@
     }
 
     // Attach event handlers
-    const startBtn = document.getElementById('dograh-inline-start-btn');
+    const startBtn = document.getElementById('callpilot-inline-start-btn');
     if (startBtn) startBtn.onclick = startCall;
 
-    const endBtn = document.getElementById('dograh-inline-end-btn');
+    const endBtn = document.getElementById('callpilot-inline-end-btn');
     if (endBtn) endBtn.onclick = stopCall;
 
     // Trigger status change callback
@@ -548,7 +548,7 @@
         <line x1="12" y1="19" x2="12" y2="23"/>
         <line x1="8" y1="23" x2="16" y2="23"/>
       </svg>`,
-      connecting: `<svg class="dograh-widget-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      connecting: `<svg class="callpilot-widget-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 2v4"/>
         <path d="M12 18v4"/>
         <path d="M4.93 4.93l2.83 2.83"/>
@@ -656,7 +656,7 @@
       await negotiate();
 
     } catch (error) {
-      console.error('Dograh Widget: Failed to start call', error);
+      console.error('CallPilot Widget: Failed to start call', error);
       updateStatus('failed', 'Connection failed', error.message || 'Please check your microphone and try again');
 
       // Trigger error callback
@@ -701,7 +701,7 @@
    */
   async function fetchTurnCredentials() {
     if (!state.sessionToken) {
-      console.warn('Dograh Widget: No session token available for TURN credentials');
+      console.warn('CallPilot Widget: No session token available for TURN credentials');
       return;
     }
 
@@ -977,7 +977,7 @@
   }
 
   // Public API
-  window.DograhWidget = {
+  window.CallPilotWidget = {
     // Core methods
     init: init,
     start: startCall,
@@ -1013,7 +1013,7 @@
     // Initialize inline mode manually (for advanced use cases)
     initInline: (options) => {
       if (options.container) {
-        state.config.containerId = options.container.id || 'dograh-inline-container';
+        state.config.containerId = options.container.id || 'callpilot-inline-container';
       }
       state.config.embedMode = 'inline';
 

@@ -10,6 +10,7 @@ import PostHogIdentify from "@/components/PostHogIdentify";
 import { SentryErrorBoundary } from "@/components/SentryErrorBoundary";
 import SpinLoader from "@/components/SpinLoader";
 import { Toaster } from "@/components/ui/sonner";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/constants/brand";
 import { AppConfigProvider } from "@/context/AppConfigContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { TelephonyConfigWarningsProvider } from "@/context/TelephonyConfigWarningsContext";
@@ -28,8 +29,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dograh",
-  description: "Open Source Voice Assistant Workflow Builder",
+  title: PRODUCT_NAME,
+  description: PRODUCT_TAGLINE,
 };
 
 export default function RootLayout({

@@ -1,11 +1,11 @@
 ---
 title: "Custom Telephony Provider"
-description: "Build your own telephony provider integration for Dograh AI"
+description: "Build your own telephony provider integration for CallPilot AI"
 ---
 
 ## Overview
 
-A telephony provider is implemented as a **self-registering package** under `api/services/telephony/providers/<name>/`. The package contributes everything Dograh needs to wire the provider in — the provider class, transport factory, audio config, request/response schemas, optional HTTP routes, and the form metadata used to render its configuration UI — through a single `ProviderSpec` registered at import time.
+A telephony provider is implemented as a **self-registering package** under `api/services/telephony/providers/<name>/`. The package contributes everything CallPilot needs to wire the provider in — the provider class, transport factory, audio config, request/response schemas, optional HTTP routes, and the form metadata used to render its configuration UI — through a single `ProviderSpec` registered at import time.
 
 Adding a new provider should not require touching the factory, the audio config, the API routes module, the run-pipeline module, or the frontend. The only edits outside the provider folder are:
 
@@ -188,7 +188,7 @@ async def create_transport(
 
 ### 3. Routes (optional)
 
-If your provider POSTs webhooks to Dograh (answer URL, status callbacks, hangup callbacks), expose them through a module-level `router`. The routes are auto-mounted under `/api/v1/telephony`.
+If your provider POSTs webhooks to CallPilot (answer URL, status callbacks, hangup callbacks), expose them through a module-level `router`. The routes are auto-mounted under `/api/v1/telephony`.
 
 ```python
 # providers/your_provider/routes.py

@@ -12,7 +12,7 @@ interface Result {
     isLatest: boolean;
 }
 
-const CACHE_KEY = "dograh-latest-release";
+const CACHE_KEY = "callpilot-latest-release";
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const SEMVER_RE = /^(?:[a-z][a-z0-9-]*-)?v?(\d+)\.(\d+)\.(\d+)$/i;
 
@@ -56,7 +56,7 @@ export function useLatestReleaseVersion(
         }
 
         let cancelled = false;
-        fetch("https://api.github.com/repos/dograh-hq/dograh/releases/latest")
+        fetch("https://api.github.com/repos/kaviesh-n8n/CallPilot/releases/latest")
             .then((res) => (res.ok ? res.json() : null))
             .then((data) => {
                 if (cancelled || !data?.tag_name) return;

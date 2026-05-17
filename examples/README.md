@@ -1,6 +1,6 @@
-# Dograh SDK Examples
+# CallPilot SDK Examples
 
-Runnable examples of the Dograh SDK in Python and TypeScript.
+Runnable examples of the CallPilot SDK in Python and TypeScript.
 
 ## Shared environment variables
 
@@ -8,7 +8,7 @@ Copy `.env.example` to `.env` in each example directory and fill in your values,
 
 | Variable              | Description                                                  |
 | --------------------- | ------------------------------------------------------------ |
-| `DOGRAH_API_ENDPOINT` | Dograh API base URL (e.g. `http://localhost:8000`)           |
+| `DOGRAH_API_ENDPOINT` | CallPilot API base URL (e.g. `http://localhost:8000`)           |
 | `DOGRAH_API_TOKEN`    | API token — sent as `X-API-Key`                              |
 
 The workflow ID and destination phone number are set as constants at the top of each example script — edit them there.

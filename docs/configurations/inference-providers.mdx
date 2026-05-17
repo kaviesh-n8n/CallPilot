@@ -1,11 +1,11 @@
 ---
 title: "Model Configurations"
-description: "Voice Agents need AI Models to work, like LLM (Large Language Model), TTS (Voice) and STT (Transcriber). You can use any of your faviourite providers with Dograh Platform to run your Voice Agent."
+description: "Voice Agents need AI Models to work, like LLM (Large Language Model), TTS (Voice) and STT (Transcriber). You can use any of your faviourite providers with CallPilot Platform to run your Voice Agent."
 ---
 
 ## How Model Configuration Works
 
-Dograh uses a **two-level configuration system** for AI models:
+CallPilot uses a **two-level configuration system** for AI models:
 
 1. **Global configuration** — A single set of model settings (LLM, TTS, STT) that applies to **all agents** by default.
 2. **Agent-level overrides** — Optional per-agent settings that override the global configuration for specific services.
@@ -18,10 +18,10 @@ Agent-level overrides are **selective** — you can override only the services y
 
 ## Global Configuration
 
-The global configuration is the default model setup shared across all your agents. Dograh ships with its own models by default — when you sign up on https://app.dograh.com or set up the platform on your self-hosted infrastructure, you get some Dograh model credits to start with.
+The global configuration is the default model setup shared across all your agents. CallPilot ships with its own models by default — when you sign up on https://app.callpilot.ai or set up the platform on your self-hosted infrastructure, you get some CallPilot model credits to start with.
 
 To configure the global models, go to **Model Configurations** in your dashboard:
-- **Hosted:** `https://app.dograh.com/model-configurations`
+- **Hosted:** `https://app.callpilot.ai/model-configurations`
 - **Self-hosted:** `http://localhost:3010/model-configurations`
 
 ![Model Configuration](../images/service-configuration.png)
@@ -35,7 +35,7 @@ From here you can configure each service:
 | **STT (Transcriber)** | The speech-to-text model that transcribes user speech (e.g., Deepgram, AssemblyAI) |
 | **Realtime** | A single speech-to-speech model that handles LLM, TTS, and STT in one (e.g., Gemini Live) |
 
-Select a provider from the dropdown and configure the API key, model, and any provider-specific settings. For Dograh's own models, see [Service Keys](api-keys) for instructions on creating Service Keys.
+Select a provider from the dropdown and configure the API key, model, and any provider-specific settings. For CallPilot's own models, see [Service Keys](api-keys) for instructions on creating Service Keys.
 
 ## Agent-Level Model Overrides
 
@@ -80,7 +80,7 @@ When an agent uses a Realtime provider, it replaces the separate TTS and STT ser
 
 Gemini 3.1 Live is Google's realtime multimodal API that handles both LLM and voice in a single model. Instead of configuring separate LLM, TTS, and STT services, Gemini Live acts as an all-in-one realtime provider — it processes speech input, generates a response, and speaks it back, all over a single streaming connection.
 
-Dograh supports Gemini 3.1 Live as a **Realtime** provider. The default model is `gemini-3.1-flash-live-preview`.
+CallPilot supports Gemini 3.1 Live as a **Realtime** provider. The default model is `gemini-3.1-flash-live-preview`.
 
 ### Available Voices
 
@@ -96,7 +96,7 @@ You can choose from the following built-in voices:
 
 ### Getting a Gemini API Key
 
-To use Gemini 3.1 Live with Dograh, you need a Google Gemini API key. Follow these steps:
+To use Gemini 3.1 Live with CallPilot, you need a Google Gemini API key. Follow these steps:
 
 1. Go to [Google AI Studio](https://aistudio.google.com/).
 2. Sign in with your Google account.
@@ -106,12 +106,12 @@ To use Gemini 3.1 Live with Dograh, you need a Google Gemini API key. Follow the
 6. Copy the generated API key and store it securely.
 
 <Note>
-  The Gemini API key is different from a Google Cloud service account key. You specifically need a **Gemini API key** from Google AI Studio for use with Dograh.
+  The Gemini API key is different from a Google Cloud service account key. You specifically need a **Gemini API key** from Google AI Studio for use with CallPilot.
 </Note>
 
-### Configuring Gemini 3.1 Live in Dograh
+### Configuring Gemini 3.1 Live in CallPilot
 
-1. Go to **Model Configurations** in your Dograh dashboard (`https://app.dograh.com/model-configurations` for hosted or `http://localhost:3010/model-configurations` for local).
+1. Go to **Model Configurations** in your CallPilot dashboard (`https://app.callpilot.ai/model-configurations` for hosted or `http://localhost:3010/model-configurations` for local).
 2. Under the **Realtime** section, select `google_realtime` as the provider.
 3. Paste your Gemini API key.
 4. Select the model (`gemini-3.1-flash-live-preview` is available by default, or you can enter a model name manually).
@@ -124,7 +124,7 @@ To use Gemini 3.1 Live with Dograh, you need a Google Gemini API key. Follow the
 
 ## Gemini Live on Vertex AI
 
-If you want to run Gemini Live through your own Google Cloud project — for billing consolidation, VPC controls, regional residency, or enterprise IAM — Dograh also supports Gemini Live via **Vertex AI** as a separate provider (`google_vertex_realtime`). The default model is `google/gemini-live-2.5-flash-native-audio`.
+If you want to run Gemini Live through your own Google Cloud project — for billing consolidation, VPC controls, regional residency, or enterprise IAM — CallPilot also supports Gemini Live via **Vertex AI** as a separate provider (`google_vertex_realtime`). The default model is `google/gemini-live-2.5-flash-native-audio`.
 
 Unlike Google AI Studio (which uses a single Gemini API key), Vertex AI authenticates with a **service account** belonging to your Google Cloud project.
 
@@ -156,12 +156,12 @@ Unlike Google AI Studio (which uses a single Gemini API key), Vertex AI authenti
 5. The key file will download to your computer — store it securely and treat it as a secret.
 
 <Note>
-  Always pick **JSON**, not P12. The Vertex AI client libraries used by Dograh only accept service-account JSON keys; P12 is a legacy format retained for older Google Workspace integrations.
+  Always pick **JSON**, not P12. The Vertex AI client libraries used by CallPilot only accept service-account JSON keys; P12 is a legacy format retained for older Google Workspace integrations.
 </Note>
 
-### Configuring Vertex AI Realtime in Dograh
+### Configuring Vertex AI Realtime in CallPilot
 
-1. Go to **Model Configurations** in your Dograh dashboard.
+1. Go to **Model Configurations** in your CallPilot dashboard.
 2. Enable the **Realtime** toggle.
 3. Under the **Realtime** section, select `google_vertex_realtime` as the provider.
 4. Fill in the fields:
@@ -179,7 +179,7 @@ Unlike Google AI Studio (which uses a single Gemini API key), Vertex AI authenti
 5. Save the configuration.
 
 <Note>
-  Paste the whole JSON file into the **Credentials** field — including `private_key`, `client_email`, and all other entries. Don't try to extract individual fields. If `Credentials` is left blank, Dograh falls back to **Application Default Credentials (ADC)** from the host environment, which is useful when running Dograh on a GCP VM or GKE pod with an attached service account.
+  Paste the whole JSON file into the **Credentials** field — including `private_key`, `client_email`, and all other entries. Don't try to extract individual fields. If `Credentials` is left blank, CallPilot falls back to **Application Default Credentials (ADC)** from the host environment, which is useful when running CallPilot on a GCP VM or GKE pod with an attached service account.
 </Note>
 
 <Note>

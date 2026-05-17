@@ -12,8 +12,8 @@ import type { LocalUser } from './types';
 // This file should only be imported in server components
 
 let stackServerApp: StackServerApp<boolean, string> | null = null;
-const OSS_TOKEN_COOKIE = 'dograh_auth_token';
-const OSS_USER_COOKIE = 'dograh_auth_user';
+const OSS_TOKEN_COOKIE = 'callpilot_auth_token';
+const OSS_USER_COOKIE = 'callpilot_auth_user';
 
 // Lazy load and cache the stack server app
 export async function getStackServerApp(): Promise<StackServerApp<boolean, string> | null> {

@@ -1,6 +1,6 @@
 ---
 title: Add to Website
-description: Add your Dograh voice agent to any website so visitors can talk to it.
+description: Add your CallPilot voice agent to any website so visitors can talk to it.
 tag: "NEW"
 ---
 
@@ -29,8 +29,8 @@ Step 4: Copy the generated embed code and paste it into your web page to test yo
 | Mode                  | What it renders                                                                                    | When to use                                                                                          |
 | --------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **Floating Widget**   | A pill-shaped CTA button anchored to a corner of the page.                                         | You want a turn-key chat-bubble experience that doesn't disturb your existing layout.                |
-| **Inline Component**  | A panel rendered inside a `<div id="dograh-inline-container">` that you place in your page.        | You want the agent embedded in a specific section (landing-page hero, support tab, etc.).            |
-| **Headless**          | No UI. Only the audio pipeline plus a JavaScript API on `window.DograhWidget`.                     | You want full control over the UI — your own buttons, design system, framework state, animations.    |
+| **Inline Component**  | A panel rendered inside a `<div id="callpilot-inline-container">` that you place in your page.        | You want the agent embedded in a specific section (landing-page hero, support tab, etc.).            |
+| **Headless**          | No UI. Only the audio pipeline plus a JavaScript API on `window.CallPilotWidget`.                     | You want full control over the UI — your own buttons, design system, framework state, animations.    |
 
 ## Prerequisites
 
@@ -38,7 +38,7 @@ These apply to all three modes:
 
 - Serve your page over **HTTPS** or from `http://localhost`. Browsers refuse microphone access on plain HTTP origins or `file://`.
 - If you set **Allowed Domains** in the dashboard, include your test origin (e.g. `localhost`) — otherwise the widget's config and signaling requests are rejected. Leave the list empty to allow all domains.
-- The embed snippet you copy from the dashboard is a single `<script>` tag that loads `dograh-widget.js` **asynchronously**. The widget auto-initializes once it loads and exposes `window.DograhWidget`. Code that registers callbacks must wait for the widget to be available.
+- The embed snippet you copy from the dashboard is a single `<script>` tag that loads `callpilot-widget.js` **asynchronously**. The widget auto-initializes once it loads and exposes `window.CallPilotWidget`. Code that registers callbacks must wait for the widget to be available.
 
 ## Floating Widget
 
@@ -63,20 +63,20 @@ Configure **Button Text**, **Button Color**, and **Call to Action Text** from th
 Place a container `<div>` where you want the widget to render. The widget auto-attaches to it.
 
 ```html
-<!-- Paste the dograh embed snippet from the dashboard somewhere on the page -->
-<div id="dograh-inline-container"></div>
+<!-- Paste the callpilot embed snippet from the dashboard somewhere on the page -->
+<div id="callpilot-inline-container"></div>
 ```
 
 ### React
 
-Because React mounts after the widget script may have already loaded, integrate via `initInline` on first mount and `refresh` on remount. Poll for `window.DograhWidget` to handle the async script load.
+Because React mounts after the widget script may have already loaded, integrate via `initInline` on first mount and `refresh` on remount. Poll for `window.CallPilotWidget` to handle the async script load.
 
 ```tsx
 import { useEffect } from 'react';
 
 declare global {
   interface Window {
-    DograhWidget?: {
+    CallPilotWidget?: {
       initInline: (options: { container: HTMLElement }) => void;
       refresh: () => void;
       getState: () => { isInitialized: boolean };
@@ -88,11 +88,11 @@ export function Assistant() {
   useEffect(() => {
     let retries = 0;
     const tryInit = () => {
-      const container = document.getElementById('dograh-inline-container');
-      if (window.DograhWidget && container) {
-        const { isInitialized } = window.DograhWidget.getState();
-        if (isInitialized) window.DograhWidget.refresh();
-        else window.DograhWidget.initInline({ container });
+      const container = document.getElementById('callpilot-inline-container');
+      if (window.CallPilotWidget && container) {
+        const { isInitialized } = window.CallPilotWidget.getState();
+        if (isInitialized) window.CallPilotWidget.refresh();
+        else window.CallPilotWidget.initInline({ container });
       } else if (retries++ < 50) {
         setTimeout(tryInit, 100);
       }
@@ -100,7 +100,7 @@ export function Assistant() {
     tryInit();
   }, []);
 
-  return <div id="dograh-inline-container" />;
+  return <div id="callpilot-inline-container" />;
 }
 ```
 
@@ -114,19 +114,19 @@ In Headless mode the widget injects no UI of its own. You render whatever button
 
 | Method / Callback                              | Description                                                                                                                                                  |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `window.DograhWidget.start()`                  | Begin a voice call. Must be called from inside a user-gesture handler (e.g. `click`) so the browser grants microphone access.                                |
-| `window.DograhWidget.end()`                    | End the active call.                                                                                                                                         |
-| `window.DograhWidget.onCallStart(cb)`          | Fires when `start()` is invoked (status `connecting`). No payload.                                                                                           |
-| `window.DograhWidget.onCallConnected(cb)`      | Fires when the WebRTC connection is established. Payload: `{ agentId, workflowRunId, token }`.                                                               |
-| `window.DograhWidget.onCallDisconnected(cb)`   | Fires only if the call had connected, when teardown runs. Payload: `{ agentId, workflowRunId, token, durationSeconds }`.                                     |
-| `window.DograhWidget.onCallEnd(cb)`            | Fires whenever the call session is torn down (including failed-to-connect attempts). No payload.                                                             |
-| `window.DograhWidget.onStatusChange(cb)`       | Fires on every status change. Callback receives `(status, text, subtext)`. Status values: `idle`, `connecting`, `connected`, `failed`.                       |
-| `window.DograhWidget.onError(cb)`              | Fires on errors (mic permission denied, server error, etc.). Callback receives an `Error` object.                                                            |
+| `window.CallPilotWidget.start()`                  | Begin a voice call. Must be called from inside a user-gesture handler (e.g. `click`) so the browser grants microphone access.                                |
+| `window.CallPilotWidget.end()`                    | End the active call.                                                                                                                                         |
+| `window.CallPilotWidget.onCallStart(cb)`          | Fires when `start()` is invoked (status `connecting`). No payload.                                                                                           |
+| `window.CallPilotWidget.onCallConnected(cb)`      | Fires when the WebRTC connection is established. Payload: `{ agentId, workflowRunId, token }`.                                                               |
+| `window.CallPilotWidget.onCallDisconnected(cb)`   | Fires only if the call had connected, when teardown runs. Payload: `{ agentId, workflowRunId, token, durationSeconds }`.                                     |
+| `window.CallPilotWidget.onCallEnd(cb)`            | Fires whenever the call session is torn down (including failed-to-connect attempts). No payload.                                                             |
+| `window.CallPilotWidget.onStatusChange(cb)`       | Fires on every status change. Callback receives `(status, text, subtext)`. Status values: `idle`, `connecting`, `connected`, `failed`.                       |
+| `window.CallPilotWidget.onError(cb)`              | Fires on errors (mic permission denied, server error, etc.). Callback receives an `Error` object.                                                            |
 
 All `on*` setters are single-listener — calling the same one again replaces the previous handler.
 
 <Note>
-**About timing.** The widget script loads asynchronously, so `window.DograhWidget` may not exist at the moment your inline `<script>` first runs. The examples below assume `window.DograhWidget` is already available when registration runs. To guarantee that:
+**About timing.** The widget script loads asynchronously, so `window.CallPilotWidget` may not exist at the moment your inline `<script>` first runs. The examples below assume `window.CallPilotWidget` is already available when registration runs. To guarantee that:
 
 - **Vanilla JS:** wrap your registration code in `window.addEventListener('load', () => { /* register here */ })`.
 - **React:** inside `useEffect`, register immediately if `document.readyState === 'complete'`, otherwise add a one-time `window.load` listener that registers on fire.
@@ -150,20 +150,20 @@ All `on*` setters are single-listener — calling the same one again replaces th
       : 'Talk to AI';
   }
 
-  window.DograhWidget.onStatusChange((status) => {
+  window.CallPilotWidget.onStatusChange((status) => {
     callStatus = status;
     render();
   });
 
-  window.DograhWidget.onError((err) => {
-    console.error('Dograh error:', err.message);
+  window.CallPilotWidget.onError((err) => {
+    console.error('CallPilot error:', err.message);
   });
 
   btn.addEventListener('click', () => {
     if (callStatus === 'connected' || callStatus === 'connecting') {
-      window.DograhWidget.end();
+      window.CallPilotWidget.end();
     } else {
-      window.DograhWidget.start();
+      window.CallPilotWidget.start();
     }
   });
 </script>
@@ -178,7 +178,7 @@ type CallStatus = 'idle' | 'connecting' | 'connected' | 'failed';
 
 declare global {
   interface Window {
-    DograhWidget: {
+    CallPilotWidget: {
       start: () => void;
       end: () => void;
       onStatusChange: (cb: (status: CallStatus, text?: string, subtext?: string) => void) => void;
@@ -191,15 +191,15 @@ export function TalkButton() {
   const [status, setStatus] = useState<CallStatus>('idle');
 
   useEffect(() => {
-    window.DograhWidget.onStatusChange((s) => setStatus(s));
-    window.DograhWidget.onError((err) => console.error('Dograh error:', err.message));
+    window.CallPilotWidget.onStatusChange((s) => setStatus(s));
+    window.CallPilotWidget.onError((err) => console.error('CallPilot error:', err.message));
   }, []);
 
   const isLive = status === 'connected' || status === 'connecting';
   const label = { idle: 'Talk to AI', connecting: 'Connecting…', connected: 'End Call', failed: 'Retry' }[status];
 
   return (
-    <button onClick={() => (isLive ? window.DograhWidget.end() : window.DograhWidget.start())}>
+    <button onClick={() => (isLive ? window.CallPilotWidget.end() : window.CallPilotWidget.start())}>
       {label}
     </button>
   );
@@ -215,11 +215,11 @@ export function TalkButton() {
 The `on*` callbacks in the [Headless JavaScript API](#javascript-api) work in **all three embed modes**, not just Headless. Use them for analytics or to trigger UI in the host page even when the widget is rendering its own UI (Floating or Inline).
 
 ```js
-window.DograhWidget.onCallConnected(({ agentId, workflowRunId }) => {
+window.CallPilotWidget.onCallConnected(({ agentId, workflowRunId }) => {
   analytics.track('voice_call_started', { agentId, workflowRunId });
 });
 
-window.DograhWidget.onCallDisconnected(({ workflowRunId, durationSeconds }) => {
+window.CallPilotWidget.onCallDisconnected(({ workflowRunId, durationSeconds }) => {
   analytics.track('voice_call_ended', { workflowRunId, durationSeconds });
 });
 ```

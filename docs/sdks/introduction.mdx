@@ -1,12 +1,12 @@
 ---
 title: "Introduction"
-description: "Build and operate Dograh voice AI agents programmatically from Python or TypeScript"
+description: "Build and operate CallPilot voice AI agents programmatically from Python or TypeScript"
 ---
 
-Dograh ships official SDKs for **Python** and **TypeScript** that wrap the Dograh REST API and the workflow builder. Use them to create or edit agents, place outbound calls, and inspect runs from your own code.
+CallPilot ships official SDKs for **Python** and **TypeScript** that wrap the CallPilot REST API and the workflow builder. Use them to create or edit agents, place outbound calls, and inspect runs from your own code.
 
-- **Python** — [`dograh-sdk`](https://pypi.org/project/dograh-sdk/) on PyPI
-- **TypeScript** — [`@dograh/sdk`](https://www.npmjs.com/package/@dograh/sdk) on npm
+- **Python** — [`callpilot-sdk`](https://pypi.org/project/callpilot-sdk/) on PyPI
+- **TypeScript** — [`@callpilot/sdk`](https://www.npmjs.com/package/@callpilot/sdk) on npm
 
 Both packages are generated from the same backend OpenAPI spec, so the method surface is equivalent — only the naming convention differs (`snake_case` in Python, `camelCase` in TypeScript).
 
@@ -14,33 +14,33 @@ Both packages are generated from the same backend OpenAPI spec, so the method su
 
 <CodeGroup>
 ```bash Python
-pip install dograh-sdk
+pip install callpilot-sdk
 ```
 ```bash TypeScript
-npm install @dograh/sdk
+npm install @callpilot/sdk
 ```
 </CodeGroup>
 
 ## Authenticate
 
-Generate an API key at [`/api-keys`](https://app.dograh.com/api-keys) (or `http://localhost:3010/api-keys` for self-hosted). See [API Keys](/configurations/api-keys) for details.
+Generate an API key at [`/api-keys`](https://app.callpilot.ai/api-keys) (or `http://localhost:3010/api-keys` for self-hosted). See [API Keys](/configurations/api-keys) for details.
 
-Both SDKs read the API key from the `DOGRAH_API_KEY` environment variable by default, and the base URL from `DOGRAH_API_URL` (defaults to `http://localhost:8000`). You can also pass them explicitly.
+Both SDKs read the API key from the `CALLPILOT_API_KEY` environment variable by default, and the base URL from `CALLPILOT_API_URL` (defaults to `http://localhost:8000`). You can also pass them explicitly.
 
 <CodeGroup>
 ```python Python
-from dograh_sdk import DograhClient
+from callpilot_sdk import CallPilotClient
 
-client = DograhClient(
-    base_url="https://app.dograh.com",
+client = CallPilotClient(
+    base_url="https://app.callpilot.ai",
     api_key="YOUR_API_KEY",
 )
 ```
 ```typescript TypeScript
-import { DograhClient } from "@dograh/sdk";
+import { CallPilotClient } from "@callpilot/sdk";
 
-const client = new DograhClient({
-    baseUrl: "https://app.dograh.com",
+const client = new CallPilotClient({
+    baseUrl: "https://app.callpilot.ai",
     apiKey: "YOUR_API_KEY",
 });
 ```

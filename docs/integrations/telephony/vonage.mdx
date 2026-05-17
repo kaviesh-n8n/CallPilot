@@ -1,11 +1,11 @@
 ---
 title: "Vonage Integration"
-description: "Configure Vonage (Nexmo) for voice communication in Dograh AI"
+description: "Configure Vonage (Nexmo) for voice communication in CallPilot AI"
 ---
 
 ## Overview
 
-Vonage (formerly Nexmo) is a cloud communications platform that provides global voice, messaging, and video capabilities. Dograh AI's Vonage integration enables high-quality voice interactions with your agents using Vonage's robust infrastructure.
+Vonage (formerly Nexmo) is a cloud communications platform that provides global voice, messaging, and video capabilities. CallPilot AI's Vonage integration enables high-quality voice interactions with your agents using Vonage's robust infrastructure.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ Before setting up Vonage integration, you'll need:
 - Application ID and Private Key from your Vonage Dashboard
 - API Key and API Secret from your Vonage Dashboard
 - At least one Vonage phone number linked to the application
-- Dograh AI instance running and accessible
+- CallPilot AI instance running and accessible
 
 ## Configuration
 
@@ -35,7 +35,7 @@ Before setting up Vonage integration, you'll need:
 3. Copy your phone number(s)
 4. Link your numbers to your application
 
-### Step 3: Configure in Dograh AI
+### Step 3: Configure in CallPilot AI
 
 1. Navigate to **/telephony-configurations** and click **Add configuration**
 2. Select **Vonage** as your provider
@@ -55,14 +55,14 @@ Before setting up Vonage integration, you'll need:
 
 ## Inbound Calling Setup
 
-Vonage configures inbound webhooks at the **application level**, not per phone number. A single **Answer URL** on the Vonage application applies to every number linked to it. Dograh routes the call to the right agent based on the called number's inbound workflow assignment inside Dograh. **When you save an inbound workflow on a phone number, Dograh automatically pushes the webhook URL to your Vonage Application's Answer URL** (provided the credentials are correct).
+Vonage configures inbound webhooks at the **application level**, not per phone number. A single **Answer URL** on the Vonage application applies to every number linked to it. CallPilot routes the call to the right agent based on the called number's inbound workflow assignment inside CallPilot. **When you save an inbound workflow on a phone number, CallPilot automatically pushes the webhook URL to your Vonage Application's Answer URL** (provided the credentials are correct).
 
 ### Step 1: Link Phone Numbers to Your Vonage Application
 
 1. Open the [Vonage Dashboard](https://dashboard.nexmo.com/)
-2. Under **Numbers** → **Your Numbers**, link each number you want to use for inbound to the same Vonage Application whose ID you configured in Dograh
+2. Under **Numbers** → **Your Numbers**, link each number you want to use for inbound to the same Vonage Application whose ID you configured in CallPilot
 
-### Step 2: Assign an Inbound Workflow to the Phone Number in Dograh
+### Step 2: Assign an Inbound Workflow to the Phone Number in CallPilot
 
 1. Go to **/telephony-configurations** and open your Vonage configuration
 2. In the **Phone numbers** section, edit the number that should receive inbound calls
@@ -73,29 +73,29 @@ Vonage configures inbound webhooks at the **application level**, not per phone n
 
 1. Open your Vonage Application in the [Vonage Dashboard](https://dashboard.nexmo.com/)
 2. Under **Capabilities** → **Voice**, confirm:
-   - **Answer URL** is set to: `https://api.dograh.com/api/v1/telephony/inbound/run`
+   - **Answer URL** is set to: `https://api.callpilot.ai/api/v1/telephony/inbound/run`
    - **HTTP Method** is `POST`
 
    <Note>
-     Dograh pushed this URL automatically when you saved the inbound workflow
-     in Step 2. If the field is empty, shows a different URL, or Dograh
+     CallPilot pushed this URL automatically when you saved the inbound workflow
+     in Step 2. If the field is empty, shows a different URL, or CallPilot
      surfaced a sync warning on save, the auto-push failed — most often
-     because the API Key/Secret or Application ID in Dograh is incorrect.
+     because the API Key/Secret or Application ID in CallPilot is incorrect.
      Paste the URL into the field yourself, set the method to `POST`, and
-     save the application. On self-hosted Dograh, replace `api.dograh.com`
+     save the application. On self-hosted CallPilot, replace `api.callpilot.ai`
      with your backend domain.
    </Note>
 
 ### Step 4: Verify Setup
 
-- Ensure your Dograh AI instance is publicly accessible
+- Ensure your CallPilot AI instance is publicly accessible
 - Verify any firewalls allow Vonage's IP ranges
 
 ### Test Inbound Calling
 
 1. Call your configured Vonage phone number from another phone
-2. Verify your Dograh AI voice agent answers and responds
-3. Check call logs in both Dograh AI dashboard and Vonage Dashboard
+2. Verify your CallPilot AI voice agent answers and responds
+3. Check call logs in both CallPilot AI dashboard and Vonage Dashboard
 
 ## Audio Quality Optimization
 
@@ -141,15 +141,15 @@ Vonage uses higher quality audio (16kHz) which provides:
   </Accordion>
   
   <Accordion title="Inbound calls not reaching voice agent">
-    - Verify the Vonage application's Answer URL is set to `https://api.dograh.com/api/v1/telephony/inbound/run`
+    - Verify the Vonage application's Answer URL is set to `https://api.callpilot.ai/api/v1/telephony/inbound/run`
     - Ensure the Answer URL is publicly accessible
     - Confirm the called number is linked to the correct Vonage application
-    - Confirm the called number exists in your Dograh telephony configuration and has an **Inbound workflow** assigned
+    - Confirm the called number exists in your CallPilot telephony configuration and has an **Inbound workflow** assigned
   </Accordion>
   
   <Accordion title="Voice agent doesn't respond to inbound calls">
     - Confirm the phone number has an **Inbound workflow** assigned in /telephony-configurations
-    - Verify API Key matches the one stored in your Dograh telephony configuration (used to identify the org from the inbound webhook)
+    - Verify API Key matches the one stored in your CallPilot telephony configuration (used to identify the org from the inbound webhook)
     - Verify WebSocket connection establishes successfully
     - Review call logs for error messages
   </Accordion>

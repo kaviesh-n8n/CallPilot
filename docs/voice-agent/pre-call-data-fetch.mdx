@@ -3,13 +3,13 @@ title: "Pre-Call Data Fetch"
 description: "Fetch customer data from your CRM or ERP before the call starts, so your voice agent can greet callers by name and reference their account details."
 ---
 
-Pre-Call Data Fetch allows you to enrich the call context with external data before the voice agent starts speaking. When enabled on the **Start Call** node, Dograh sends an HTTP request to your API as soon as a call is initiated. While the response is loading, the caller hears a ring-back tone. Once the data arrives, it is merged into the call's [initial context](/core-concepts/context-and-variables#initial_context) and becomes available as template variables in your prompts and greetings.
+Pre-Call Data Fetch allows you to enrich the call context with external data before the voice agent starts speaking. When enabled on the **Start Call** node, CallPilot sends an HTTP request to your API as soon as a call is initiated. While the response is loading, the caller hears a ring-back tone. Once the data arrives, it is merged into the call's [initial context](/core-concepts/context-and-variables#initial_context) and becomes available as template variables in your prompts and greetings.
 
 
 ## How It Works
 
 1. A call arrives (inbound) or is initiated (outbound).
-2. Dograh sends a **POST** request to your configured endpoint with a standardized payload.
+2. CallPilot sends a **POST** request to your configured endpoint with a standardized payload.
 3. The caller hears a ring-back tone while waiting for the response.
 4. Your API responds with a JSON object containing `dynamic_variables`.
 5. The variables are merged into the call's initial context.
@@ -21,12 +21,12 @@ Open the **Start Call** node editor and expand **Advanced Settings**. Toggle **P
 
 | Field | Description |
 | --- | --- |
-| **Endpoint URL** | The URL Dograh will send the POST request to. |
+| **Endpoint URL** | The URL CallPilot will send the POST request to. |
 | **Authentication** | Optional credential for authenticating the request. Supports API key, bearer token, basic auth, and custom header. |
 
 ## Request Format
 
-Dograh sends a `POST` request with the following JSON payload:
+CallPilot sends a `POST` request with the following JSON payload:
 
 ```json
 {
@@ -140,7 +140,7 @@ These context variables are only used during test calls from the workflow editor
 A simple Node.js endpoint that looks up a customer by phone number:
 
 ```javascript
-app.post("/dograh/pre-call", async (req, res) => {
+app.post("/callpilot/pre-call", async (req, res) => {
   const { call_inbound } = req.body;
 
   const customer = await db.customers.findOne({

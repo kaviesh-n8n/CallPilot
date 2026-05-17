@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 
-import { GitHubStarBadge } from '@/components/layout/GitHubStarBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PRODUCT_NAME, PRODUCT_SHORT_NAME } from '@/constants/brand';
 import { useAuth } from '@/lib/auth';
 
 export default function OverviewPage() {
@@ -19,7 +19,7 @@ export default function OverviewPage() {
                     <CardHeader>
                         <CardTitle className="text-3xl">
                             {isOSSMode ? (
-                                "Welcome to Dograh"
+                                `Welcome to ${PRODUCT_SHORT_NAME}`
                             ) : (
                                 `Welcome${user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}!`
                             )}
@@ -27,7 +27,7 @@ export default function OverviewPage() {
                         <CardDescription className="text-lg mt-2">
                             {isOSSMode ? (
                                 <>
-                                    Open source alternative to Vapi. Help us support the project by giving us a star on GitHub.
+                                    Build, test, and launch voice AI agents with your own model, voice, and telephony providers.
                                 </>
                             ) : (
                                 "Get started with building voice AI workflows"
@@ -36,8 +36,8 @@ export default function OverviewPage() {
                     </CardHeader>
                     <CardContent>
                         {isOSSMode && (
-                            <div className="mb-6">
-                                <GitHubStarBadge label="Star us on GitHub" showCount source="overview_page" />
+                            <div className="mb-6 text-sm text-muted-foreground">
+                                Free setup includes local testing and 5 demo-call positioning. Real outbound calls require a connected telephony provider.
                             </div>
                         )}
                     </CardContent>
@@ -76,6 +76,38 @@ export default function OverviewPage() {
                             </Button>
                         </CardContent>
                     </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Launch Voice Campaigns</CardTitle>
+                            <CardDescription>
+                                Upload leads, pace outbound calls, and monitor progress from one workspace
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Button asChild variant="outline">
+                                <Link href="/campaigns">
+                                    Open Campaigns
+                                </Link>
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Pick a Plan</CardTitle>
+                            <CardDescription>
+                                Compare Free, Starter, Pro, and Agency levels for {PRODUCT_NAME}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Button asChild variant="outline">
+                                <Link href="/pricing">
+                                    View Pricing
+                                </Link>
+                            </Button>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Resources Section */}
@@ -83,28 +115,16 @@ export default function OverviewPage() {
                     <CardHeader>
                         <CardTitle>Resources</CardTitle>
                         <CardDescription>
-                            Get help and learn more about Dograh
+                            Set up the core parts of your {PRODUCT_SHORT_NAME} workspace
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-wrap gap-4">
                             <Button asChild variant="outline">
-                                <a
-                                    href="https://docs.dograh.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Documentation
-                                </a>
+                                <Link href="/model-configurations">Connect AI Keys</Link>
                             </Button>
                             <Button asChild variant="outline">
-                                <a
-                                    href="https://github.com/dograh-hq/dograh/issues"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Report an Issue
-                                </a>
+                                <Link href="/telephony-configurations">Connect Telephony</Link>
                             </Button>
                         </div>
                     </CardContent>

@@ -1,9 +1,9 @@
 ---
 title: "Update"
-description: "Update your self-hosted Dograh stack to a newer image version"
+description: "Update your self-hosted CallPilot stack to a newer image version"
 ---
 
-This guide covers updating a Dograh stack you've already deployed with [Docker](/deployment/docker) or a [custom domain](/deployment/custom-domain). You run commands from the same directory that contains your `docker-compose.yaml` (this is the `dograh/` directory if you used `setup_remote.sh`).
+This guide covers updating a CallPilot stack you've already deployed with [Docker](/deployment/docker) or a [custom domain](/deployment/custom-domain). You run commands from the same directory that contains your `docker-compose.yaml` (this is the `callpilot/` directory if you used `setup_remote.sh`).
 
 There are three update flows depending on how you deployed:
 
@@ -13,7 +13,7 @@ There are three update flows depending on how you deployed:
 
 ## Find an image version
 
-Dograh publishes two images — `dograh-api` and `dograh-ui` — to both container registries:
+CallPilot publishes two images — `dograh-api` and `dograh-ui` — to both container registries:
 
 - **GitHub Container Registry** — [github.com/orgs/dograh-hq/packages](https://github.com/orgs/dograh-hq/packages)
 - **Docker Hub** — [hub.docker.com/u/dograhai](https://hub.docker.com/u/dograhai)
@@ -22,7 +22,7 @@ Each release is published under two kinds of tags. Note the formats differ betwe
 
 | Where | Tag format | Example | When to use |
 |-------|-----------|---------|-------------|
-| GitHub release tag | `dograh-vX.Y.Z` | `dograh-v1.28.0` | What you see at [github.com/dograh-hq/dograh/releases](https://github.com/dograh-hq/dograh/releases) |
+| GitHub release tag | `dograh-vX.Y.Z` | `dograh-v1.28.0` | What you see at [github.com/kaviesh-n8n/CallPilot/releases](https://github.com/kaviesh-n8n/CallPilot/releases) |
 | Docker image tag (semver) | `X.Y.Z` | `1.28.0` | Stable, recommended for production |
 | Docker image tag (SHA)    | short SHA | `a1b2c3d` | Bleeding edge — any commit merged to `main` |
 | Docker image tag (`latest`) | `latest` | `latest` | Tracks the most recent release tag |
@@ -44,8 +44,8 @@ Always update **`dograh-api`** and **`dograh-ui`** to the **same tag**. The two 
 From your install directory:
 
 ```bash
-cd dograh
-curl -o update_remote.sh https://raw.githubusercontent.com/dograh-hq/dograh/main/scripts/update_remote.sh
+cd callpilot
+curl -o update_remote.sh https://raw.githubusercontent.com/kaviesh-n8n/CallPilot/main/scripts/update_remote.sh
 bash update_remote.sh
 ```
 
@@ -98,7 +98,7 @@ curl http://localhost:8000/api/v1/health           # local
 `update_remote.sh` saves backups of every file it touched. To roll back, restore them and recreate the stack — the exact commands (including the timestamp it used) are printed at the end of the script's output. The generic form:
 
 ```bash
-cd dograh
+cd callpilot
 for f in docker-compose.yaml nginx.conf turnserver.conf .env remote_up.sh scripts/run_dograh_init.sh scripts/lib/setup_common.sh deploy/templates/nginx.remote.conf.template deploy/templates/turnserver.remote.conf.template; do
     [[ -f "$f.bak.<timestamp>" ]] && cp "$f.bak.<timestamp>" "$f"
 done
@@ -108,7 +108,7 @@ done
 Your Postgres data volume persists across `down`/`up` cycles, so agents and call history are preserved.
 
 <Warning>
-Rolling back across a database migration is not always safe — if the newer release ran a schema migration, downgrading may leave the DB in a state the older API doesn't understand. If in doubt, [open an issue](https://github.com/dograh-hq/dograh/issues) before rolling back.
+Rolling back across a database migration is not always safe — if the newer release ran a schema migration, downgrading may leave the DB in a state the older API doesn't understand. If in doubt, [open an issue](https://github.com/kaviesh-n8n/CallPilot/issues) before rolling back.
 </Warning>
 
 ## Updating a source build
@@ -116,7 +116,7 @@ Rolling back across a database migration is not always safe — if the newer rel
 If you deployed in **build mode** (you'll have a `docker-compose.override.yaml` in your install directory), `update_remote.sh` deliberately refuses to run — you already have the full repo locally and update via git:
 
 ```bash
-cd dograh
+cd callpilot
 git fetch
 
 # Track latest main:

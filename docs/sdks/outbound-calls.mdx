@@ -1,13 +1,13 @@
 ---
 title: "Place an outbound call"
-description: "Trigger a Dograh voice agent to call a phone number from the SDK"
+description: "Trigger a CallPilot voice agent to call a phone number from the SDK"
 ---
 
-Use the SDK to place a test outbound call from a specific agent to a phone number. This is the same endpoint used by the **Test Call** button in the Dograh UI.
+Use the SDK to place a test outbound call from a specific agent to a phone number. This is the same endpoint used by the **Test Call** button in the CallPilot UI.
 
 ## Prerequisites
 
-- A Dograh [API key](/configurations/api-keys) exported as `DOGRAH_API_KEY`
+- A CallPilot [API key](/configurations/api-keys) exported as `CALLPILOT_API_KEY`
 - A published agent (you need the agent ID)
 - A configured telephony provider — see [Telephony](/integrations/telephony/overview) for Twilio, Vonage, and other setups
 
@@ -15,10 +15,10 @@ Use the SDK to place a test outbound call from a specific agent to a phone numbe
 
 <CodeGroup>
 ```python Python
-from dograh_sdk import DograhClient
-from dograh_sdk._generated_models import InitiateCallRequest
+from callpilot_sdk import CallPilotClient
+from callpilot_sdk._generated_models import InitiateCallRequest
 
-with DograhClient(api_key="YOUR_API_KEY") as client:
+with CallPilotClient(api_key="YOUR_API_KEY") as client:
     client.test_phone_call(
         body=InitiateCallRequest(
             workflow_id=123,
@@ -27,9 +27,9 @@ with DograhClient(api_key="YOUR_API_KEY") as client:
     )
 ```
 ```typescript TypeScript
-import { DograhClient } from "@dograh/sdk";
+import { CallPilotClient } from "@callpilot/sdk";
 
-const client = new DograhClient({ apiKey: "YOUR_API_KEY" });
+const client = new CallPilotClient({ apiKey: "YOUR_API_KEY" });
 
 await client.testPhoneCall({
     body: {

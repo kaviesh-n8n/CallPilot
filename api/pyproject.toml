@@ -1,5 +1,5 @@
 [project]
-name = "dograh-api"
+name = "callpilot-api"
 version = "1.30.0"
-description = "Backend API for Dograh voice AI platform"
+description = "Backend API for CallPilot voice AI platform"
 requires-python = ">=3.12"

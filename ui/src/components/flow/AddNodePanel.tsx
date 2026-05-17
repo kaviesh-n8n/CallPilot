@@ -107,7 +107,7 @@ export default function AddNodePanel({ isOpen, onNodeSelect, onClose }: AddNodeP
                     <div className="flex flex-col gap-1">
                         <h2 className="text-lg font-semibold">Add New Node</h2>
                         <a
-                            href="https://docs.dograh.com/voice-agent/introduction"
+                            href="https://docs.callpilot.ai/voice-agent/introduction"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"

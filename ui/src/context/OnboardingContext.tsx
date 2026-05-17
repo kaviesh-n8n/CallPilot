@@ -14,7 +14,7 @@ interface OnboardingContextType {
     resetOnboarding: () => void;
 }
 
-const ONBOARDING_STORAGE_KEY = 'dograh_onboarding_state';
+const ONBOARDING_STORAGE_KEY = 'callpilot_onboarding_state';
 
 const defaultState: OnboardingState = {
     seenTooltips: [],
