@@ -39,8 +39,8 @@ NEXT_PUBLIC_NODE_ENV=production
 
 The included `render.yaml` provisions:
 
-- `callpilot-cache` as a Render Key Value instance
-- `callpilot-api` as a single Docker web service
+- `callpilot-cache` as a free Render Key Value instance
+- `callpilot-api` as a free single Docker web service
 
 It intentionally runs at **one instance** because the current Docker entrypoint starts:
 
@@ -50,6 +50,8 @@ It intentionally runs at **one instance** because the current Docker entrypoint 
 - telephony manager
 
 all in the same container. That is stable for beta traffic, but not the final autoscaling shape.
+
+The free Render shape is for testing and early demos. Free services can sleep, cold-start, and have lower resource limits, so move the API and Key Value service to paid instance types before selling production call volume.
 
 ### Render secret/env values to paste
 

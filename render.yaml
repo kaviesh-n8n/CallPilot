@@ -1,7 +1,7 @@
 services:
   - type: keyvalue
     name: callpilot-cache
-    plan: starter
+    plan: free
     region: singapore
     maxmemoryPolicy: allkeys-lru
     ipAllowList: []
@@ -13,7 +13,7 @@ services:
   - type: web
     name: callpilot-api
     runtime: docker
-    plan: starter
+    plan: free
     region: singapore
     dockerContext: .
     dockerfilePath: ./api/Dockerfile
