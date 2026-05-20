@@ -18,7 +18,6 @@ services:
     dockerContext: .
     dockerfilePath: ./api/Dockerfile
     healthCheckPath: /api/v1/health
-    maxShutdownDelaySeconds: 120
     numInstances: 1
     envVars:
       - key: ENVIRONMENT
