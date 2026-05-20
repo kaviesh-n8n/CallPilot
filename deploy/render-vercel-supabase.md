@@ -59,23 +59,19 @@ During Blueprint creation, Render will prompt for:
 
 ```text
 DATABASE_URL
-S3_BUCKET
-S3_REGION
 S3_ENDPOINT_URL
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
-UI_APP_URL
 ```
 
 Use these values:
 
 - `DATABASE_URL`: Supabase connection string with the scheme changed to `postgresql+asyncpg://`
-- `S3_BUCKET`: your R2 bucket name
-- `S3_REGION`: `auto` for R2
 - `S3_ENDPOINT_URL`: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
 - `AWS_ACCESS_KEY_ID`: R2 access key ID
 - `AWS_SECRET_ACCESS_KEY`: R2 secret access key
-- `UI_APP_URL`: your Vercel production URL or custom app domain
+
+The Blueprint defaults `S3_BUCKET=callpilot-media`, `S3_REGION=auto`, and `UI_APP_URL=https://call-pilot.vercel.app` for the first free demo deploy. Change them later if your bucket name or Vercel URL is different.
 
 `BACKEND_API_ENDPOINT` does not need to be set on Render unless you want to override the default. The backend now falls back to Render's `RENDER_EXTERNAL_URL`.
 
