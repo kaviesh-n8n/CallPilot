@@ -32,6 +32,8 @@ Backend environment lives in `api/.env`; frontend environment lives in `ui/.env`
 
 Supabase can provide the managed Postgres database by setting `DATABASE_URL` in the backend environment. The stack still needs Redis for queues/cache and S3-compatible storage for recordings and uploaded files, so pair Supabase with a managed Redis service and either S3/R2 or the included MinIO container. Do not commit provider API keys; users should connect their own keys through the app.
 
+For the Vercel + Render + Supabase + Cloudflare launch path, follow [deploy/render-vercel-supabase.md](deploy/render-vercel-supabase.md).
+
 ## Main Apps
 
 - `api/`: FastAPI backend

@@ -52,7 +52,7 @@ Never use the placeholder `OSS_JWT_SECRET` in a production deployment. Generate 
 
 | Variable | Default | Description |
 |---|---|---|
-| `BACKEND_API_ENDPOINT` | `http://localhost:8000` | Internal URL of the backend API |
+| `BACKEND_API_ENDPOINT` | `RENDER_EXTERNAL_URL` or `http://localhost:8000` | Public backend URL used for webhooks, downloads, and WebRTC callbacks. On Render, CallPilot automatically falls back to `RENDER_EXTERNAL_URL` when `BACKEND_API_ENDPOINT` is unset. |
 | `UI_APP_URL` | `http://localhost:3010` | URL of the frontend application |
 | `MPS_API_URL` | `https://services.dograh.com` | CallPilot Managed Platform Services URL |
 | `DOGRAH_MPS_SECRET_KEY` | `null` | **Required for non-OSS deployments.** Secret key for authenticating with MPS |
@@ -74,13 +74,16 @@ CallPilot uses **MinIO by default**, which is bundled with the self-hosted deplo
 | `MINIO_BUCKET` | `voice-audio` | Bucket name for audio files |
 | `MINIO_SECURE` | `false` | Use HTTPS for MinIO connections |
 
-### AWS S3 (alternative)
+### S3-compatible storage (alternative)
 
 | Variable | Default | Description |
 |---|---|---|
 | `ENABLE_AWS_S3` | `false` | Set to `true` to use AWS S3 instead of MinIO |
+| `S3_ENDPOINT_URL` | `null` | Optional S3-compatible endpoint URL. Set this for Cloudflare R2 or other non-AWS S3 providers. |
 | `S3_BUCKET` | `null` | S3 bucket name |
-| `S3_REGION` | `us-east-1` | AWS region |
+| `S3_REGION` | `us-east-1` | AWS region, or `auto` when using Cloudflare R2 |
+
+Cloudflare R2 works by setting `ENABLE_AWS_S3=true`, `S3_ENDPOINT_URL=https://<ACCOUNT_ID>.r2.cloudflarestorage.com`, and `S3_REGION=auto`.
 
 ---
 

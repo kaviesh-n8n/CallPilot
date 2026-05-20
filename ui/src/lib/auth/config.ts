@@ -12,7 +12,10 @@ export async function getAuthProvider(): Promise<string> {
   }
 
   try {
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:8000";
+    const backendUrl =
+      process.env.BACKEND_URL ||
+      process.env.NEXT_PUBLIC_BACKEND_URL ||
+      "http://localhost:8000";
     const res = await fetch(`${backendUrl}/api/v1/health`, {
       next: { revalidate: 300 },
     });

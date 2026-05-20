@@ -1,6 +1,11 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
+const backendUrl =
+  process.env.BACKEND_URL ||
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  "http://localhost:8000";
+
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'standalone',
@@ -12,7 +17,7 @@ const nextConfig: NextConfig = {
       // API proxy for backend calls (excluding Next.js API routes)
       {
         source: "/api/:path((?!config|auth).*)*",
-        destination: `${process.env.BACKEND_URL || 'http://localhost:8000'}/api/:path*`,
+        destination: `${backendUrl}/api/:path*`,
       },
       {
         source: "/ingest/static/:path*",

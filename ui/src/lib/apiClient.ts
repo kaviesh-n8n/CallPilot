@@ -7,7 +7,9 @@ export const createClientConfig: CreateClientConfig = (config) => {
     let baseUrl: string;
 
     if (isServer) {
-        baseUrl = process.env.BACKEND_URL || 'http://api:8000';
+        baseUrl = process.env.BACKEND_URL
+            || process.env.NEXT_PUBLIC_BACKEND_URL
+            || 'http://api:8000';
     } else {
         baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || window.location.origin;
     }

@@ -10,6 +10,7 @@ from api.constants import (
     MINIO_SECRET_KEY,
     MINIO_SECURE,
     S3_BUCKET,
+    S3_ENDPOINT_URL,
     S3_REGION,
 )
 from api.enums import Environment, StorageBackend
@@ -54,10 +55,11 @@ def get_storage_for_backend(backend: str) -> BaseFileSystem:
             )
         bucket = S3_BUCKET
         region = S3_REGION
+        location = S3_ENDPOINT_URL or region
         logger.info(
-            f"Initializing {backend} storage with bucket '{bucket}' in region '{region}'"
+            f"Initializing {backend} storage with bucket '{bucket}' using '{location}'"
         )
-        return S3FileSystem(bucket, region)
+        return S3FileSystem(bucket, region, endpoint_url=S3_ENDPOINT_URL)
 
     # Future backend implementations can be added here:
     # elif backend == StorageBackend.GCS:  # Code 3

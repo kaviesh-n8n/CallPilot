@@ -18,8 +18,11 @@ LANGFUSE_HOST = os.getenv("LANGFUSE_HOST")
 LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
 LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
 
-# URLs for deployment
-BACKEND_API_ENDPOINT = os.getenv("BACKEND_API_ENDPOINT", "http://localhost:8000")
+# URLs for deployment. On Render we can safely fall back to the platform's
+# public service URL if BACKEND_API_ENDPOINT is not explicitly configured.
+BACKEND_API_ENDPOINT = os.getenv(
+    "BACKEND_API_ENDPOINT", os.getenv("RENDER_EXTERNAL_URL", "http://localhost:8000")
+)
 UI_APP_URL = os.getenv("UI_APP_URL", "http://localhost:3010")
 
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -42,6 +45,7 @@ MINIO_BUCKET = os.getenv("MINIO_BUCKET", "voice-audio")
 MINIO_SECURE = os.getenv("MINIO_SECURE", "false").lower() == "true"
 
 # AWS S3 Configuration
+S3_ENDPOINT_URL = os.environ.get("S3_ENDPOINT_URL")
 S3_BUCKET = os.environ.get("S3_BUCKET")
 S3_REGION = os.environ.get("S3_REGION", "us-east-1")
 

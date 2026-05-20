@@ -14,7 +14,10 @@ async function fetchAuthProvider(): Promise<string> {
   }
 
   try {
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const backendUrl =
+      process.env.BACKEND_URL ||
+      process.env.NEXT_PUBLIC_BACKEND_URL ||
+      'http://localhost:8000';
     const res = await fetch(`${backendUrl}/api/v1/health`);
     if (res.ok) {
       const data = await res.json();

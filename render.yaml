@@ -1,0 +1,62 @@
+services:
+  - type: keyvalue
+    name: callpilot-cache
+    plan: starter
+    region: singapore
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+  # v1 launch shape:
+  # - single public backend service
+  # - background workers/orchestrators run inside the same container
+  # - horizontal scaling stays at 1 instance until those roles are split out
+  - type: web
+    name: callpilot-api
+    runtime: docker
+    plan: starter
+    region: singapore
+    dockerContext: .
+    dockerfilePath: ./api/Dockerfile
+    healthCheckPath: /api/v1/health
+    maxShutdownDelaySeconds: 120
+    numInstances: 1
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEPLOYMENT_MODE
+        value: oss
+      - key: AUTH_PROVIDER
+        value: local
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENABLE_TELEMETRY
+        value: "false"
+      - key: UVICORN_BASE_PORT
+        value: "10000"
+      - key: FASTAPI_WORKERS
+        value: "1"
+      - key: ARQ_WORKERS
+        value: "1"
+      - key: OSS_JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: callpilot-cache
+          property: connectionString
+      - key: ENABLE_AWS_S3
+        value: "true"
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_REGION
+        sync: false
+      - key: S3_ENDPOINT_URL
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: UI_APP_URL
+        sync: false
