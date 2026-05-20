@@ -48,9 +48,9 @@ services:
       - key: ENABLE_AWS_S3
         value: "true"
       - key: S3_BUCKET
-        sync: false
+        value: callpilot-media
       - key: S3_REGION
-        sync: false
+        value: auto
       - key: S3_ENDPOINT_URL
         sync: false
       - key: AWS_ACCESS_KEY_ID
@@ -58,4 +58,4 @@ services:
       - key: AWS_SECRET_ACCESS_KEY
         sync: false
       - key: UI_APP_URL
-        sync: false
+        value: https://call-pilot.vercel.app
