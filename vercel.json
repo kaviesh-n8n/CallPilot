@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "cd ui && npm ci",
+  "buildCommand": "cd ui && npm run build",
+  "outputDirectory": "ui/.next",
+  "env": {
+    "BACKEND_URL": "https://settle-provision-much-implemented.trycloudflare.com",
+    "NEXT_PUBLIC_BACKEND_URL": "https://settle-provision-much-implemented.trycloudflare.com",
+    "NEXT_PUBLIC_NODE_ENV": "production"
+  }
+}
