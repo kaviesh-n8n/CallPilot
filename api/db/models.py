@@ -71,6 +71,30 @@ class UserModel(Base):
     password_hash = Column(String, nullable=True)
 
 
+class LoginEventModel(Base):
+    __tablename__ = "login_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    organization_id = Column(
+        Integer, ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True
+    )
+    email = Column(String, nullable=True, index=True)
+    ip_address = Column(String(64), nullable=True)
+    user_agent = Column(Text, nullable=True)
+    auth_provider = Column(String(32), nullable=False, default="local")
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
+
+    user = relationship("UserModel")
+    organization = relationship("OrganizationModel")
+
+    __table_args__ = (
+        Index("ix_login_events_user_created", "user_id", "created_at"),
+        Index("ix_login_events_organization_created", "organization_id", "created_at"),
+        Index("ix_login_events_created_at", "created_at"),
+    )
+
+
 class UserConfigurationModel(Base):
     __tablename__ = "user_configurations"
     id = Column(Integer, primary_key=True, index=True)

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from loguru import logger
 
 from api.db import db_client
-from api.db.models import UserModel
+from api.db.models import LoginEventModel, UserModel
 from api.enums import PostHogEvent
 from api.schemas.auth import AuthResponse, LoginRequest, SignupRequest, UserResponse
 from api.services.auth.depends import create_user_configuration_with_mps_key, get_user
@@ -77,7 +77,7 @@ async def signup(request: SignupRequest):
 
 
 @router.post("/login", response_model=AuthResponse)
-async def login(request: LoginRequest):
+async def login(request: LoginRequest, http_request: Request):
     # Look up user by email
     user = await db_client.get_user_by_email(request.email)
     if not user or not user.password_hash:
@@ -98,6 +98,31 @@ async def login(request: LoginRequest):
             "auth_provider": "local",
         },
     )
+
+    try:
+        forwarded_for = http_request.headers.get("x-forwarded-for")
+        ip_address = (
+            forwarded_for.split(",")[0].strip()
+            if forwarded_for
+            else http_request.client.host
+            if http_request.client
+            else None
+        )
+
+        async with db_client.async_session() as session:
+            session.add(
+                LoginEventModel(
+                    user_id=user.id,
+                    organization_id=user.selected_organization_id,
+                    email=user.email,
+                    ip_address=ip_address,
+                    user_agent=http_request.headers.get("user-agent"),
+                    auth_provider="local",
+                )
+            )
+            await session.commit()
+    except Exception:
+        logger.warning("Failed to record login event", exc_info=True)
 
     return AuthResponse(
         token=token,
