@@ -21,8 +21,30 @@ export function LocalProviderWrapper({ children }: { children: React.ReactNode }
         if (response.ok) {
           const data = await response.json();
           tokenRef.current = data.token;
-          setUser(data.user);
-          logger.info('OSS auth initialized', { user: data.user });
+
+          let sessionUser = data.user;
+          try {
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || window.location.origin;
+            const meResponse = await fetch(`${backendUrl}/api/v1/auth/me`, {
+              headers: {
+                Authorization: `Bearer ${data.token}`,
+              },
+            });
+
+            if (meResponse.ok) {
+              sessionUser = await meResponse.json();
+            }
+          } catch (error) {
+            logger.warn('Unable to refresh OSS user metadata', error);
+          }
+
+          setUser({
+            ...sessionUser,
+            provider: 'local',
+            organizationId: sessionUser?.organizationId || (sessionUser?.organization_id ? String(sessionUser.organization_id) : undefined),
+            isSuperuser: Boolean(sessionUser?.isSuperuser || sessionUser?.is_superuser),
+          });
+          logger.info('OSS auth initialized', { user: sessionUser });
         } else if (response.status === 401) {
           // No token - redirect to login (but not if already on auth pages)
           if (!window.location.pathname.startsWith('/auth/')) {

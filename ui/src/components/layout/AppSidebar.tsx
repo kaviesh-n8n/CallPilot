@@ -174,6 +174,7 @@ export function AppSidebar() {
   const { telnyxMissingWebhookPublicKeyCount } = useTelephonyConfigWarnings();
   const hasTelephonyWarning = telnyxMissingWebhookPublicKeyCount > 0;
   const isCollapsed = !isMobile && state === "collapsed";
+  const isSuperuser = Boolean((user as LocalUser | undefined)?.isSuperuser);
 
   // Get selected team for Stack auth (cast to Team type from Stack)
   // Stabilize the reference so SelectedTeamSwitcher only sees a change when the team ID changes,
@@ -347,7 +348,16 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className={cn("notranslate", isCollapsed && "px-0")} translate="no">
-        {NAV_SECTIONS.map((section, index) => (
+        {NAV_SECTIONS.map((section, index) => {
+          const visibleItems = section.items.filter(
+            (item) => item.url !== "/superadmin" || isSuperuser
+          );
+
+          if (visibleItems.length === 0) {
+            return null;
+          }
+
+          return (
           <SidebarGroup
             key={section.label ?? "overview"}
             className={index === 0 ? "mt-2" : "mt-6"}
@@ -361,17 +371,18 @@ export function AppSidebar() {
                 translate="no"
               >
                 {section.label}
-              </SidebarGroupLabel>
-            )}
-            <SidebarMenu>
-              {section.items.map((item) => (
+            </SidebarGroupLabel>
+          )}
+          <SidebarMenu>
+              {visibleItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarLink item={item} />
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroup>
-        ))}
+          );
+        })}
       </SidebarContent>
 
       <SidebarFooter

@@ -14,6 +14,7 @@ export interface LocalUser extends BaseUser {
   organizationId?: string;
   displayName?: string;
   provider_id?: string;
+  isSuperuser?: boolean;
 }
 
 // Union type for all user types
@@ -37,4 +38,3 @@ export interface AuthConfig {
   // Provider-specific configuration
   [key: string]: string | number | boolean;
 }
-

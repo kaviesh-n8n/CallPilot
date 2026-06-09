@@ -95,6 +95,7 @@ export async function getOSSUser(): Promise<LocalUser | null> {
         email: parsed.email,
         provider: 'local',
         organizationId: parsed.organizationId || (parsed.organization_id ? String(parsed.organization_id) : undefined),
+        isSuperuser: Boolean(parsed.isSuperuser || parsed.is_superuser),
       };
     } catch (error) {
       logger.error('Error parsing user cookie:', error);
